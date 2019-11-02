@@ -16,6 +16,14 @@ const StartForm = props => {
 
   return (
     <div className='start-form-modal' >
+      <div className='tutorial-button-wrap'>
+        <button
+          className='tutorial-open-button'
+          onClick={props.onTutorialButtonClick}
+        >
+          게임설명
+        </button>
+      </div>
       <form
         className='start-form'
         onSubmit={(event) => props.onUserNameSubmit(event)}

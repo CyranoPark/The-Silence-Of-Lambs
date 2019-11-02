@@ -63,7 +63,7 @@ export default class Start extends Component {
       controls.update();
       renderer.render( startScene.scene, startScene.camera );
     }
-  }
+  };
 
   handleUserNameSubmit = async event => {
     event.preventDefault();
@@ -81,7 +81,7 @@ export default class Start extends Component {
       toPlayRoute: false,
       isValidName: false
     });
-  }
+  };
 
   handleUserNameInput = (userName) => {
     const { onUserNameInputChange } = this.props;
@@ -91,28 +91,43 @@ export default class Start extends Component {
       });
     }
     onUserNameInputChange(userName);
-  }
+  };
+
+  handleTutorialModalClose = () => {
+    this.setState({isOpenTutorial : false});
+  };
+
+  handleTutorialModalOpen = () => {
+    this.setState({isOpenTutorial : true});
+  };
 
   render() {
     const { userName } = this.props;
     const { toPlayRoute, isOpenTutorial } = this.state;
+    console.log(isOpenTutorial)
     if (toPlayRoute === true) {
       return <Redirect to='/play' />
     }
 
     return (
-      <div id='start-title' ref={this.titleScene}>
-        {
-          isOpenTutorial ?
-          <Tutorial /> :
+      <>
+      <div id='start-title' ref={this.titleScene} />
+      {
+        isOpenTutorial ? (
+          <Tutorial
+            closeModal={this.handleTutorialModalClose}
+          />
+        ) : (
           <StartForm
             userName={userName}
             isValidName={this.state.isValidName}
+            onTutorialButtonClick={this.handleTutorialModalOpen}
             onUserNameInputChange={this.handleUserNameInput}
             onUserNameSubmit={this.handleUserNameSubmit}
           />
-        }
-      </div>
+        )
+      }
+      </>
     );
   }
 }
