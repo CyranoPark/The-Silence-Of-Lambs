@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import {
   sceneWidth,
   sceneHeight
-} from '../../Constants/Style';
+} from '../../constants/style';
 
 export default class Scene extends Component {
   constructor(props) {

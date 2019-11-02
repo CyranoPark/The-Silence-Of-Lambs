@@ -1,58 +1,46 @@
 import * as THREE from 'three';
-import optimerRegular from '../font/optimer_bold.typeface.json';
 import {
-  titleSceneWidth,
-  titleSceneHeight
-} from '../../Constants/Style';
+  sceneWidth,
+  sceneHeight
+} from '../../constants/style';
+
 export default class StartScene {
   constructor() {
     // CAMERA
-    this.camera = new THREE.PerspectiveCamera( 50, titleSceneWidth / titleSceneHeight, 0.1, 2000 );
-    this.camera.position.set( 0, 200, 500 );
-    this.cameraTarget = new THREE.Vector3( 0, 100, 0 );
+    this.camera = new THREE.PerspectiveCamera( 20, sceneWidth / sceneHeight, 0.1, 2000 );
+    this.camera.position.set( 30, 5, 40 );
+    this.cameraTarget = new THREE.Vector3( 0, 0, 0 );
     this.camera.lookAt(this.cameraTarget);
 
     this.scene = new THREE.Scene();
-    this.scene.background = new THREE.Color( 0xffffff );
+    this.scene.background = new THREE.Color( 0x282c34 );
     this.scene.fog = new THREE.Fog( 0xffffff, 250, 1400 );
 
-    this.axes = new THREE.AxisHelper(100);
-    this.scene.add(this.axes);
-
     this.addLight();
-    this.loadFont();
+    this.addPlane();
   }
+  addPlane(){
+    const planeGeometry = new THREE.CircleGeometry(30, 100);
+    const planeMaterial = new THREE.MeshPhongMaterial({ color: 0x009933 });
+    const plane = new THREE.Mesh(planeGeometry, planeMaterial);
+    plane.receiveShadow = true;
+    // plane.castShadow = true;
+    plane.rotation.x = -0.5 * Math.PI;
 
+    this.scene.add(plane);
+  }
   addLight() {
-    const dirLight = new THREE.DirectionalLight( 0xffffff, 0.125 );
-    dirLight.position.set( 0, 0, 1 ).normalize();
-    this.scene.add( dirLight );
+    const directLight1 = new THREE.DirectionalLight(0xffffff, 0.8);
+    directLight1.position.set(9.5, 8.2, 8.3);
+    this.scene.add(directLight1);
 
-    const pointLight = new THREE.PointLight( 0xffffff, 1.5 );
-    pointLight.position.set( 0, 100, 90 );
-    this.scene.add( pointLight );
-  }
+    const light = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.5);
+    this.scene.add(light);
 
-  loadFont() {
-    const loader = new THREE.FontLoader();
-    const font = loader.parse(optimerRegular);
-    const textGeometry = new THREE.TextGeometry( 'The Silence Of Lambs', {
-      font,
-      size: 80,
-      height: 5,
-      curveSegments: 12,
-      bevelEnabled: true,
-      bevelThickness: 10,
-      bevelSize: 8,
-      bevelOffset: 0,
-      bevelSegments: 5
-    });
-    const textMaterial = new THREE.MeshPhongMaterial( { color: 0xffffff } );
-    const textMesh = new THREE.Mesh( textGeometry, textMaterial );
-    textMesh.position.x = -540;
-    textMesh.position.y = 100;
-    textMesh.position.z = 0;
-
-    this.scene.add(textMesh);
+    // const pointLight = new THREE.PointLight(0xffffff, 3);
+    // pointLight.position.set( 0, 50, 9 );
+    // this.scene.add(pointLight);
   }
 }
+
+// Vector3 {x: 71.46448516514947, y: 58.63196713598016, z: 86.36257963296242}

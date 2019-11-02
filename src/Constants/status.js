@@ -1,0 +1,2 @@
+export const BEFORE_START_GAME = 'BEFORE_START_GAME';
+export const PLAYING_GAME = 'BEFORE_START_GAME';

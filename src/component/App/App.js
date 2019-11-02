@@ -1,12 +1,26 @@
 import React from 'react';
-import Scene from '../GameField/Scene';
+import { Route, Redirect } from 'react-router-dom';
 import Start from '../GameStart/Start';
 import './App.scss';
 
-function App() {
+const App = props => {
+  const { userName, onUserNameInputChange } = props;
   return (
     <div className="App">
-      <Start />
+      <Route
+        exact path="/"
+        render={() => <Redirect to="/start" />}
+      />
+      <Route
+        exact path="/start"
+        render={routeProps =>
+          <Start
+            {...routeProps}
+            userName={userName}
+            onUserNameInputChange={onUserNameInputChange}
+          />
+        }
+      />
     </div>
   );
 }
