@@ -10,6 +10,7 @@ import TitleText from '../../models/Text/Title';
 import Lamb from '../../models/objects/Lamb';
 
 import { checkValidUserName } from '../../api';
+import { PLAYING_GAME } from '../../constants/status';
 
 import {
   sceneWidth,
@@ -21,9 +22,7 @@ export default class Start extends Component {
   constructor(props) {
     super(props);
 
-    this.titleScene = React.createRef();
     this.state = {
-      toPlayRoute: false,
       isValidName: true,
       isOpenTutorial: false
     }
@@ -34,9 +33,9 @@ export default class Start extends Component {
   }
 
   renderScene = () => {
-    const renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setSize(sceneWidth, sceneHeight);
-    this.titleScene.current.appendChild(renderer.domElement);
+    this.renderer = new THREE.WebGLRenderer({ antialias: true });
+    this.renderer.setSize(sceneWidth, sceneHeight);
+    this.startScene.appendChild(this.renderer.domElement);
 
     const startScene = new StartScene();
     const titleText = new TitleText('The Silence Of Lambs');
@@ -46,51 +45,48 @@ export default class Start extends Component {
     titleText.textMesh.rotation.y = 0.21 * Math.PI;
 
     const lamb = new Lamb();
-    lamb.group.position.x = 12;
-    lamb.group.position.y = 2;
-    lamb.group.position.z = 0;
-
+    const position = new THREE.Vector3(12, 1.7, 0);
+    lamb.group.position.x = position.x;
+    lamb.group.position.y = position.y;
+    lamb.group.position.z = position.z;
     startScene.scene.add(titleText.textMesh);
     startScene.scene.add(lamb.group);
 
-    const controls = new OrbitControls( startScene.camera, renderer.domElement );
-    animate();
+    const controls = new OrbitControls( startScene.camera, this.renderer.domElement );
 
-    function animate() {
+    const animate = () => {
       requestAnimationFrame( animate );
 
-      lamb.jump(0.1);
+      lamb.jump(0.05);
       controls.update();
-      renderer.render( startScene.scene, startScene.camera );
-    }
+      this.renderer.render( startScene.scene, startScene.camera );
+    };
+
+    animate();
   };
 
   handleUserNameSubmit = async event => {
     event.preventDefault();
 
-    const { userName } = this.props;
+    const { userName, handleGameStart } = this.props;
     const isValidName = await checkValidUserName(userName);
 
     if (isValidName) {
-      return this.setState({
-        toPlayRoute: true,
-        isValidName: true
-      });
+      return handleGameStart();
     }
     return this.setState({
-      toPlayRoute: false,
       isValidName: false
     });
   };
 
   handleUserNameInput = (userName) => {
-    const { onUserNameInputChange } = this.props;
+    const { changeUserNameInput } = this.props;
     if (!this.state.isValidName) {
       this.setState({
         isValidName: true
       });
     }
-    onUserNameInputChange(userName);
+    changeUserNameInput(userName);
   };
 
   handleTutorialModalClose = () => {
@@ -102,31 +98,30 @@ export default class Start extends Component {
   };
 
   render() {
-    const { userName } = this.props;
-    const { toPlayRoute, isOpenTutorial } = this.state;
-    console.log(isOpenTutorial)
-    if (toPlayRoute === true) {
+    const { userName, gameProgress } = this.props;
+    const { isOpenTutorial } = this.state;
+    if (gameProgress === PLAYING_GAME) {
       return <Redirect to='/play' />
     }
 
     return (
       <>
-      <div id='start-title' ref={this.titleScene} />
-      {
-        isOpenTutorial ? (
-          <Tutorial
-            closeModal={this.handleTutorialModalClose}
-          />
-        ) : (
-          <StartForm
-            userName={userName}
-            isValidName={this.state.isValidName}
-            onTutorialButtonClick={this.handleTutorialModalOpen}
-            onUserNameInputChange={this.handleUserNameInput}
-            onUserNameSubmit={this.handleUserNameSubmit}
-          />
-        )
-      }
+      <div id='start-title' ref={(startScene) => { this.startScene = startScene }} />
+        {
+          isOpenTutorial ? (
+            <Tutorial
+              closeModal={this.handleTutorialModalClose}
+            />
+          ) : (
+            <StartForm
+              userName={userName}
+              isValidName={this.state.isValidName}
+              onTutorialButtonClick={this.handleTutorialModalOpen}
+              onUserNameInputChange={this.handleUserNameInput}
+              onUserNameSubmit={this.handleUserNameSubmit}
+            />
+          )
+        }
       </>
     );
   }

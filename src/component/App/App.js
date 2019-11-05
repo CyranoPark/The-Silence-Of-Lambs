@@ -1,10 +1,17 @@
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
 import Start from '../GameStart/Start';
+import Play from '../GamePlay/Play';
 import './App.scss';
 
 const App = props => {
-  const { userName, onUserNameInputChange } = props;
+  const {
+    userName,
+    gameProgress,
+    handleGameStart,
+    changeUserNameInput
+  } = props;
+
   return (
     <div className="App">
       <Route
@@ -17,7 +24,18 @@ const App = props => {
           <Start
             {...routeProps}
             userName={userName}
-            onUserNameInputChange={onUserNameInputChange}
+            gameProgress={gameProgress}
+            handleGameStart={handleGameStart}
+            changeUserNameInput={changeUserNameInput}
+          />
+        }
+      />
+      <Route
+        exact path="/play"
+        render={routeProps =>
+          <Play
+            {...routeProps}
+            userName={userName}
           />
         }
       />

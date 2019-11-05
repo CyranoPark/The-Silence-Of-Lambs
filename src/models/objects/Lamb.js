@@ -19,7 +19,10 @@ export default class Lamb {
       roughness: 1,
       shading: THREE.FlatShading
     });
+
     this.vAngle = 110;
+    this.lambPosition = this.group.position.z;
+    this.isDirectionZ = true;
 
     this.drawBody();
     this.drawHead();
@@ -37,6 +40,7 @@ export default class Lamb {
     body.receiveShadow = true;
     this.group.add(body);
   }
+
   drawHead() {
     const head = new THREE.Group();
     head.position.set(0, 0.65, 1.6);
@@ -91,6 +95,7 @@ export default class Lamb {
     this.leftEar.rotation.z = -this.rightEar.rotation.z;
     head.add(this.leftEar);
   }
+
   drawLegs() {
     const legGeometry = new THREE.CylinderGeometry(0.3, 0.15, 1, 4);
     legGeometry.translate(0, -0.5, 0);
@@ -116,6 +121,7 @@ export default class Lamb {
     this.backLeftLeg.rotation.x = -this.frontLeftLeg.rotation.x;
     this.group.add(this.backLeftLeg);
   }
+
   jump(speed) {
     this.vAngle += speed;
     this.group.position.y = Math.sin(this.vAngle) + 2.58;
@@ -129,6 +135,30 @@ export default class Lamb {
 
     const earRotation = Math.sin(this.vAngle) * Math.PI / 3 + 1.5;
 
+    this.rightEar.rotation.z = earRotation;
+    this.leftEar.rotation.z = -earRotation;
+  }
+
+  walk(speed, position) {
+    this.vAngle += speed;
+
+    const currentPosition = new THREE.Vector3();
+    currentPosition.setFromMatrixPosition(this.group.matrixWorld);
+    console.log(this.group.rotation.y);
+    if (currentPosition.distanceTo(new THREE.Vector3(0, 1.7, 0)) > 35) {
+      this.group.translateZ(-0.5);
+      this.group.rotation.y =  THREE.Math.radToDeg(Math.random() * 2 * Math.PI);
+    }
+
+    this.group.translateZ(speed);
+    const legRotation = Math.sin(this.vAngle) * Math.PI / 6 + 0.4;
+
+    this.frontRightLeg.rotation.x = -legRotation;
+    this.backRightLeg.rotation.x = legRotation;
+    this.frontLeftLeg.rotation.x = -legRotation;
+    this.backLeftLeg.rotation.x = legRotation;
+
+    const earRotation = Math.sin(this.vAngle) * Math.PI / 3 + 1.5;
     this.rightEar.rotation.z = earRotation;
     this.leftEar.rotation.z = -earRotation;
   }

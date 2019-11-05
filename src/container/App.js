@@ -1,12 +1,14 @@
 import { connect } from 'react-redux';
 import App from '../component/App/App';
 import { getScores, postScore, checkValidUserName } from '../api'
-import { changeUserNameInput } from '../action';
+import { changeUserNameInput, startGame } from '../action';
 
 const mapStateToProps = state => {
   const { name } = state.user;
+  const { gameProgress } = state.game;
   return {
-    userName: name
+    userName: name,
+    gameProgress
   };
 }
 
@@ -15,8 +17,11 @@ const mapDispatchToProps = dispatch => {
   //   checkValidUserName('hanjun').then((data) => console.log(data))
   // })
   return {
-    onUserNameInputChange(userName) {
+    changeUserNameInput(userName) {
       dispatch(changeUserNameInput(userName));
+    },
+    handleGameStart() {
+      dispatch(startGame());
     }
   };
 }
