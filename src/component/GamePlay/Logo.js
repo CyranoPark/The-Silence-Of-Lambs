@@ -1,5 +1,4 @@
 import React from 'react';
-import { FaWindowClose, FaRegArrowAltCircleLeft, FaRegArrowAltCircleRight } from "react-icons/fa";
 
 const Logo = props => {
   return (

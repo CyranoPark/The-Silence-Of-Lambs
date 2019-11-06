@@ -8,9 +8,11 @@ import Tutorial from './Tutorial';
 import StartScene from '../../models/Scene/StartScene';
 import TitleText from '../../models/Text/Title';
 import Lamb from '../../models/objects/Lamb';
+import Boy from '../../models/objects/Boy';
 
 import { checkValidUserName } from '../../api';
 import { PLAYING_GAME } from '../../constants/status';
+import { lambColor, lambSize } from '../../constants/game';
 
 import {
   sceneWidth,
@@ -44,20 +46,20 @@ export default class Start extends Component {
     titleText.textMesh.position.z = 5;
     titleText.textMesh.rotation.y = 0.21 * Math.PI;
 
-    const lamb = new Lamb();
-    const position = new THREE.Vector3(12, 1.7, 0);
+    const lamb = new Lamb('WELCOME', lambColor[0].code, lambSize[0].size);
+    const position = new THREE.Vector3(8, 1.7, 0);
     lamb.group.position.x = position.x;
     lamb.group.position.y = position.y;
     lamb.group.position.z = position.z;
+    lamb.group.rotation.y = 0.21 * Math.PI;
     startScene.scene.add(titleText.textMesh);
     startScene.scene.add(lamb.group);
-
+    lamb.died();
     const controls = new OrbitControls( startScene.camera, this.renderer.domElement );
-
     const animate = () => {
       requestAnimationFrame( animate );
 
-      lamb.jump(0.05);
+      // lamb.jump(0.05);
       controls.update();
       this.renderer.render( startScene.scene, startScene.camera );
     };

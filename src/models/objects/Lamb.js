@@ -1,24 +1,37 @@
 import * as THREE from 'three';
+import optimerRegular from 'three/examples/fonts/droid/droid_sans_regular.typeface.json';
 
 export default class Lamb {
-  constructor() {
+  constructor(name, color, size) {
     this.group = new THREE.Group();
+    this.group.scale.x = size;
+    this.group.scale.y = size;
+    this.group.scale.z = size;
 
     this.woolMaterial = new THREE.MeshStandardMaterial({
-      color: 0xffffff,
+      color: color,
       roughness: 1,
-      shading: THREE.FlatShading
+      shading: true
     });
     this.skinMaterial = new THREE.MeshStandardMaterial({
       color: 0xffaf8b,
       roughness: 1,
-      shading: THREE.FlatShading
+      shading: true
     });
     this.darkMaterial = new THREE.MeshStandardMaterial({
       color: 0x4b4553,
       roughness: 1,
-      shading: THREE.FlatShading
+      shading: true
     });
+    this.bloodMaterial = new THREE.MeshStandardMaterial({
+      color: 0xaf111c,
+      roughness: 1,
+      shading: true
+    });
+
+    this.name = name;
+    this.size = size;
+    this.color = color;
 
     this.vAngle = 110;
     this.lambPosition = this.group.position.z;
@@ -27,6 +40,7 @@ export default class Lamb {
     this.drawBody();
     this.drawHead();
     this.drawLegs();
+    this.drawName();
   }
 
   rad(degrees) {
@@ -38,48 +52,49 @@ export default class Lamb {
     const body = new THREE.Mesh(bodyGeometry, this.woolMaterial);
     body.castShadow = true;
     body.receiveShadow = true;
+
     this.group.add(body);
   }
 
   drawHead() {
-    const head = new THREE.Group();
-    head.position.set(0, 0.65, 1.6);
-    head.rotation.x = this.rad(-20);
-    this.group.add(head);
+    this.head = new THREE.Group();
+    this.head.position.set(0, 0.65, 1.6);
+    this.head.rotation.x = this.rad(-20);
+    this.group.add(this.head);
 
     const foreheadGeometry = new THREE.BoxGeometry(0.7, 0.6, 0.7);
-    const forehead = new THREE.Mesh(foreheadGeometry, this.skinMaterial);
-    forehead.castShadow = true;
-    forehead.receiveShadow = true;
-    forehead.position.y = -0.15;
-    head.add(forehead);
+    this.forehead = new THREE.Mesh(foreheadGeometry, this.skinMaterial);
+    this.forehead.castShadow = true;
+    this.forehead.receiveShadow = true;
+    this.forehead.position.y = -0.15;
+    this.head.add(this.forehead);
 
     const faceGeometry = new THREE.CylinderGeometry(0.5, 0.15, 0.4, 4, 1);
-    const face = new THREE.Mesh(faceGeometry, this.skinMaterial);
-    face.castShadow = true;
-    face.receiveShadow = true;
-    face.position.y = -0.65;
-    face.rotation.y = this.rad(45);
-    head.add(face);
+    this.face = new THREE.Mesh(faceGeometry, this.skinMaterial);
+    this.face.castShadow = true;
+    this.face.receiveShadow = true;
+    this.face.position.y = -0.65;
+    this.face.rotation.y = this.rad(45);
+    this.head.add(this.face);
 
     const woolGeometry = new THREE.BoxGeometry(0.84, 0.46, 0.9);
-    const wool = new THREE.Mesh(woolGeometry, this.woolMaterial);
-    wool.position.set(0, 0.12, 0.07);
-    wool.rotation.x = this.rad(20);
-    head.add(wool);
+    this.wool = new THREE.Mesh(woolGeometry, this.woolMaterial);
+    this.wool.position.set(0, 0.12, 0.07);
+    this.wool.rotation.x = this.rad(20);
+    this.head.add(this.wool);
 
     const rightEyeGeometry = new THREE.CylinderGeometry(0.08, 0.1, 0.06, 6);
-    const rightEye = new THREE.Mesh(rightEyeGeometry, this.darkMaterial);
-    rightEye.castShadow = true;
-    rightEye.receiveShadow = true;
-    rightEye.position.set(0.35, -0.48, 0.33);
-    rightEye.rotation.set(this.rad(130.8), 0, this.rad(-45));
-    head.add(rightEye);
+    this.rightEye = new THREE.Mesh(rightEyeGeometry, this.darkMaterial);
+    this.rightEye.castShadow = true;
+    this.rightEye.receiveShadow = true;
+    this.rightEye.position.set(0.35, -0.48, 0.33);
+    this.rightEye.rotation.set(this.rad(130.8), 0, this.rad(-45));
+    this.head.add(this.rightEye);
 
-    const leftEye = rightEye.clone();
-    leftEye.position.x = -rightEye.position.x;
-    leftEye.rotation.z = -rightEye.rotation.z;
-    head.add(leftEye);
+    this.leftEye = this.rightEye.clone();
+    this.leftEye.position.x = -this.rightEye.position.x;
+    this.leftEye.rotation.z = -this.rightEye.rotation.z;
+    this.head.add(this.leftEye);
 
     const rightEarGeometry = new THREE.BoxGeometry(0.12, 0.5, 0.3);
     rightEarGeometry.translate(0, -0.25, 0);
@@ -88,12 +103,12 @@ export default class Lamb {
     this.rightEar.receiveShadow = true;
     this.rightEar.position.set(0.35, -0.12, -0.07);
     this.rightEar.rotation.set(this.rad(20), 0, this.rad(50));
-    head.add(this.rightEar);
+    this.head.add(this.rightEar);
 
     this.leftEar = this.rightEar.clone();
     this.leftEar.position.x = -this.rightEar.position.x;
     this.leftEar.rotation.z = -this.rightEar.rotation.z;
-    head.add(this.leftEar);
+    this.head.add(this.leftEar);
   }
 
   drawLegs() {
@@ -122,6 +137,50 @@ export default class Lamb {
     this.group.add(this.backLeftLeg);
   }
 
+  drawName() {
+    const loader = new THREE.FontLoader();
+    const font = loader.parse(optimerRegular);
+    const textGeometry = new THREE.TextGeometry(this.name, {
+      font,
+      size: 0.5,
+      height: 0.1,
+      bevelEnabled: true,
+      bevelThickness: 0.1,
+      bevelSize: 0.02,
+    });
+    const textMaterial = new THREE.MeshPhongMaterial({ color: 0xffffff });
+    this.nameTag = new THREE.Mesh(textGeometry, textMaterial);
+    this.nameTag.position.x = -1;
+    this.nameTag.position.y = 2;
+    this.group.add(this.nameTag);
+  }
+
+  drawDeadEyes() {
+    this.head.remove(this.rightEye);
+    this.head.remove(this.leftEye);
+
+    const rightDeadEyeGeometry = new THREE.BoxGeometry(0.5, 0.1, 0.1);
+    this.rightDeadEye = new THREE.Mesh(rightDeadEyeGeometry, this.darkMaterial);
+    this.rightDeadEye.castShadow = true;
+    this.rightDeadEye.receiveShadow = true;
+    this.rightDeadEye.position.set(0, -0.48, 0.4);
+    this.rightDeadEye.rotation.set(0, 0, this.rad(-45));
+    this.head.add(this.rightDeadEye);
+
+    this.leftDeadEye = this.rightDeadEye.clone();
+    this.leftDeadEye.position.x = -this.rightDeadEye.position.x;
+    this.leftDeadEye.rotation.z = -this.rightDeadEye.rotation.z;
+    this.head.add(this.leftDeadEye);
+  }
+
+  drawBlood() {
+    const bloodGeometry = new THREE.CircleGeometry(5, 100);
+    this.bloodField = new THREE.Mesh(bloodGeometry, this.bloodMaterial);
+    this.bloodField.position.x = (this.size - 1) * 0.4 - 0.9;
+    this.bloodField.rotation.y = this.rad(90);
+    this.group.add(this.bloodField);
+  }
+
   jump(speed) {
     this.vAngle += speed;
     this.group.position.y = Math.sin(this.vAngle) + 2.58;
@@ -139,16 +198,8 @@ export default class Lamb {
     this.leftEar.rotation.z = -earRotation;
   }
 
-  walk(speed, position) {
+  walk(speed) {
     this.vAngle += speed;
-
-    const currentPosition = new THREE.Vector3();
-    currentPosition.setFromMatrixPosition(this.group.matrixWorld);
-    console.log(this.group.rotation.y);
-    if (currentPosition.distanceTo(new THREE.Vector3(0, 1.7, 0)) > 35) {
-      this.group.translateZ(-0.5);
-      this.group.rotation.y =  THREE.Math.radToDeg(Math.random() * 2 * Math.PI);
-    }
 
     this.group.translateZ(speed);
     const legRotation = Math.sin(this.vAngle) * Math.PI / 6 + 0.4;
@@ -161,5 +212,36 @@ export default class Lamb {
     const earRotation = Math.sin(this.vAngle) * Math.PI / 3 + 1.5;
     this.rightEar.rotation.z = earRotation;
     this.leftEar.rotation.z = -earRotation;
+  }
+
+  died() {
+    let timer = 10;
+    let frameNum = 100;
+    const initPosition = this.group.position.x;
+    const dieAnimation = () => {
+      this.group.position.x -= 1.6 / frameNum;
+      this.group.position.y -= 0.6 / frameNum;
+      this.group.rotation.z += 1.6 / frameNum;
+
+      if (this.group.position.x < initPosition - 1.6) {
+        this.drawDeadEyes();
+        this.drawBlood();
+        return;
+      }
+      setTimeout(dieAnimation, timer);
+    }
+    setTimeout(dieAnimation, timer);
+  }
+
+  reset() {
+    this.group.position.y = 0.7 + this.size;
+
+    this.frontRightLeg.rotation.z = 0;
+    this.backRightLeg.rotation.z = 0;
+    this.frontLeftLeg.rotation.z = 0;
+    this.backLeftLeg.rotation.z = 0;
+
+    this.rightEar.rotation.z = 0;
+    this.leftEar.rotation.z = 0;
   }
 }

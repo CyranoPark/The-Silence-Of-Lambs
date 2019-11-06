@@ -33,11 +33,11 @@ export default class GameScene {
     this.scene.add(plane);
   }
   addLight() {
-    const directLight1 = new THREE.DirectionalLight(0xffffff, 0.8);
+    const directLight1 = new THREE.DirectionalLight(0xffffff, 1);
     directLight1.position.set(9.5, 8.2, 8.3);
     this.scene.add(directLight1);
 
-    const light = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.5);
+    const light = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.7);
     light.castShadow = true
     this.scene.add(light);
 

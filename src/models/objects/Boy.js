@@ -2,8 +2,11 @@ import * as THREE from 'three';
 
 export default class Boy {
   constructor() {
-    this.threegroup = new THREE.Group();
-    this.threegroup.position.y = 2
+    this.group = new THREE.Group();
+    this.group.position.y = 2;
+
+    this.vAngle = 110;
+
     this.informalSmokingMat = "#ffc107";
     this.informalLegsMat = "#755b0b";
     this.informalZipperMat = "#755b0b";
@@ -68,7 +71,7 @@ export default class Boy {
 
   drawHead() {
     //head
-    var head = new THREE.BoxGeometry(300, 350, 280);
+    const head = new THREE.BoxGeometry(300, 350, 280);
     this.head = new THREE.Mesh(head, this.skinMat);
     this.head.position.x = 0;
     this.head.position.y = 1.7;
@@ -76,7 +79,7 @@ export default class Boy {
 
 
     //glasses
-    var glass = new THREE.CircleGeometry(60, 78, 10);
+    const glass = new THREE.CircleGeometry(60, 78, 10);
     //Retinas Left
     this.glassLeft = new THREE.Mesh(glass, this.eyeMat);
     this.glassLeft.position.x = -80;
@@ -89,7 +92,7 @@ export default class Boy {
     this.glassRight.position.z = 160;
 
     //glass middle
-    var glassu = new THREE.BoxGeometry(40, 10, 10);
+    const glassu = new THREE.BoxGeometry(40, 10, 10);
     //Retinas Left
     this.glassu = new THREE.Mesh(glassu, this.pupilaMat);
     this.glassu.position.x = 0;
@@ -97,7 +100,7 @@ export default class Boy {
     this.glassu.position.z = 155;
 
     //Retinas
-    var retina = new THREE.BoxGeometry(25, 25, 5);
+    const retina = new THREE.BoxGeometry(25, 25, 5);
     //Retinas Left
     this.retinaLeft = new THREE.Mesh(retina, this.pupilaMat);
     this.retinaLeft.position.x = -80;
@@ -110,34 +113,34 @@ export default class Boy {
     this.retinaRight.position.z = 168;
 
     //beard
-    var beard = new THREE.BoxGeometry(140, 130, 10);
+    const beard = new THREE.BoxGeometry(140, 130, 10);
     this.beard = new THREE.Mesh(beard, this.bearMat);
     this.beard.position.x = 0;
     this.beard.position.z = 160;
     this.beard.position.y = -140;
 
     //mout
-    var mout = new THREE.BoxGeometry(90, 60, 50);
+    const mout = new THREE.BoxGeometry(90, 60, 50);
     this.mout = new THREE.Mesh(mout, this.skinMat);
     this.mout.position.x = 0;
     this.mout.position.z = 155;
     this.mout.position.y = -130;
 
     //lip
-    var lip = new THREE.BoxGeometry(40, 20, 10);
+    const lip = new THREE.BoxGeometry(40, 20, 10);
     this.lip = new THREE.Mesh(lip, this.lipMat);
     this.lip.position.x = 0;
     this.lip.position.z = 162;
     this.lip.position.y = -120;
 
     //Hat
-    var hatTop = new THREE.BoxGeometry(320, 120, 290);
+    const hatTop = new THREE.BoxGeometry(320, 120, 290);
     this.hatTop = new THREE.Mesh(hatTop, this.hatMat);
     this.hatTop.position.x = 0;
     this.hatTop.position.z = 0;
     this.hatTop.position.y = 180;
 
-    var hatBottom = new THREE.CylinderGeometry(400, 400, 30);
+    const hatBottom = new THREE.CylinderGeometry(400, 400, 30);
     this.hatBottom = new THREE.Mesh(hatBottom, this.hatMat);
     this.hatBottom.position.x = 0;
     this.hatBottom.position.z = 0;
@@ -145,44 +148,56 @@ export default class Boy {
 
     //body
 
-    var body = new THREE.BoxGeometry(300, 250, 300);
+    const body = new THREE.BoxGeometry(300, 250, 300);
     this.body = new THREE.Mesh(body, this.smokingMat);
     this.body.position.x = 0;
     this.body.position.y = 0;
     this.body.position.z = 0;
 
+    const shoulder = new THREE.BoxGeometry(400, 100, 300);
+    this.shoulder = new THREE.Mesh(shoulder, this.smokingMat);
+    this.shoulder.position.x = 0;
+    this.shoulder.position.y = 100;
+    this.shoulder.position.z = 0;
+
     //arms
 
-    var arm = new THREE.BoxGeometry(50, 250, 100);
+    const arm = new THREE.BoxGeometry(50, 250, 100);
 
     this.armLeft = new THREE.Mesh(arm, this.smokingMat);
-    this.armLeft.position.x = -170;
+    this.armLeft.position.x = 170;
     this.armLeft.position.y = 0;
     this.armLeft.position.z = 0;
 
     this.armRight = new THREE.Mesh(arm, this.smokingMat);
-    this.armRight.position.x = 170;
+    this.armRight.position.x = -170;
     this.armRight.position.y = 0;
     this.armRight.position.z = 0;
 
 
     // hands
 
-    var hand = new THREE.BoxGeometry(50, 50, 50);
+    const hand = new THREE.BoxGeometry(50, 50, 50);
 
     this.handLeft = new THREE.Mesh(hand, this.skinMat);
-    this.handLeft.position.x = -170;
+    this.handLeft.position.x = 0;
     this.handLeft.position.y = -150;
     this.handLeft.position.z = 20;
+    this.armLeft.add(this.handLeft);
 
     this.handRight = new THREE.Mesh(hand, this.skinMat);
-    this.handRight.position.x = 170;
+    this.handRight.position.x = 0;
     this.handRight.position.y = -150;
     this.handRight.position.z = 20;
+    this.armRight.add(this.handRight);
 
+    const stick = new THREE.BoxGeometry(20, 20, 1000);
+    this.stick = new THREE.Mesh(stick, this.lipMat);
+    this.stick.position.z = 200
+    this.handRight.add(this.stick);
     //zipper
 
-    var zipper = new THREE.BoxGeometry(80, 250, 10);
+    const zipper = new THREE.BoxGeometry(80, 250, 10);
     this.zipper = new THREE.Mesh(zipper, this.zipperMat);
     this.zipper.position.x = 0;
     this.zipper.position.y = 0;
@@ -190,13 +205,13 @@ export default class Boy {
 
     //legs
 
-    var leftLeg = new THREE.BoxGeometry(100, 300, 200);
+    const leftLeg = new THREE.BoxGeometry(100, 300, 150);
     this.leftLeg = new THREE.Mesh(leftLeg, this.legsMat);
     this.leftLeg.position.x = 80;
     this.leftLeg.position.y = -200;
     this.leftLeg.position.z = 0;
 
-    var rightLeg = new THREE.BoxGeometry(100, 300, 200);
+    const rightLeg = new THREE.BoxGeometry(100, 300, 150);
     this.rightLeg = new THREE.Mesh(rightLeg, this.legsMat);
     this.rightLeg.position.x = -80;
     this.rightLeg.position.y = -200;
@@ -204,7 +219,7 @@ export default class Boy {
 
     //legsMiddle
 
-    var legsM = new THREE.BoxGeometry(10, 130, 5);
+    const legsM = new THREE.BoxGeometry(10, 130, 5);
     this.legsM = new THREE.Mesh(legsM, this.zipperMat);
     this.legsM.position.x = 0;
     this.legsM.position.y = -280;
@@ -212,18 +227,18 @@ export default class Boy {
 
     //shoes
 
-    var leftShoe = new THREE.BoxGeometry(100, 50, 200);
+    const leftShoe = new THREE.BoxGeometry(100, 50, 200);
     this.leftShoe = new THREE.Mesh(leftShoe, this.shoesMat);
-    this.leftShoe.position.x = 80;
-    this.leftShoe.position.y = -400;
+    this.leftShoe.position.x = 0;
+    this.leftShoe.position.y = -200;
     this.leftShoe.position.z = 10;
-
-    var rightShoe = new THREE.BoxGeometry(100, 50, 200);
+    this.leftLeg.add(this.leftShoe);
+    const rightShoe = new THREE.BoxGeometry(100, 50, 200);
     this.rightShoe = new THREE.Mesh(rightShoe, this.shoesMat);
-    this.rightShoe.position.x = -80;
-    this.rightShoe.position.y = -400;
+    this.rightShoe.position.x = 0;
+    this.rightShoe.position.y = -200;
     this.rightShoe.position.z = 10;
-
+    this.rightLeg.add(this.rightShoe);
 
     // group elements
 
@@ -239,16 +254,17 @@ export default class Boy {
     // this.head.add(this.mout);
     this.head.add(this.lip);
 
+    this.body.add(this.shoulder);
     this.body.add(this.armLeft);
     this.body.add(this.armRight);
     // this.body.add(this.zipper);
-    this.body.add(this.handLeft);
-    this.body.add(this.handRight);
+    // this.body.add(this.handLeft);
+    // this.body.add(this.handRight);
     this.body.add(this.rightLeg);
     this.body.add(this.leftLeg);
     // this.body.add(this.legsM);
-    this.body.add(this.leftShoe);
-    this.body.add(this.rightShoe);
+    // this.body.add(this.leftShoe);
+    // this.body.add(this.rightShoe);
 
     this.head.scale.x = 0.005
     this.body.scale.x = 0.005
@@ -257,7 +273,34 @@ export default class Boy {
     this.head.scale.z = 0.005
     this.body.scale.z = 0.005
 
-    this.threegroup.add(this.head);
-    this.threegroup.add(this.body);
+    this.group.add(this.head);
+    this.group.add(this.body);
+  }
+
+  walk(speed) {
+    this.vAngle += speed;
+
+    this.group.translateZ(speed);
+    const legRotation = Math.cos(this.vAngle) * Math.PI / 6;
+    const armRotation = Math.cos(this.vAngle) * Math.PI / 6;
+
+    this.armRight.rotation.x = -armRotation;
+    this.leftLeg.rotation.x = legRotation;
+
+    this.armLeft.rotation.x = armRotation;
+    this.rightLeg.rotation.x = -legRotation;
+  }
+
+  hit(speed) {
+    this.vAngle += speed;
+    const armRotation = Math.cos(this.vAngle) * Math.PI / 4;
+    this.armRight.rotation.x = -armRotation;
+  }
+
+  reset() {
+    this.armRight.rotation.x = 0;
+    this.leftLeg.rotation.x = 0;
+    this.armLeft.rotation.x = 0;
+    this.rightLeg.rotation.x = 0;
   }
 }

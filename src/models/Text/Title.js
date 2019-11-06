@@ -13,7 +13,7 @@ export default class titleText {
       bevelThickness: 0.2,
       bevelSize: 0.04,
     });
-    this.textMaterial = new THREE.MeshPhongMaterial( { color: 0xffffff } );
+    this.textMaterial = new THREE.MeshPhongMaterial({ color: 0xffffff });
     this.textMesh = new THREE.Mesh( this.textGeometry, this.textMaterial );
   }
 };

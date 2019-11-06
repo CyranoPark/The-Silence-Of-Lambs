@@ -73,3 +73,36 @@ $modal-background-color: rgba(0, 0, 0, 0.479);
     word-break: break-all;
   }
 }
+
+.select-box {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  margin-left: -150px;
+  width: 300px;
+  height: 100px;
+  background-color: $modal-background-color;
+  padding: 30px;
+  border-radius: 50px;
+  font-size: 25px;
+  font-weight: bold;
+  color: $text-color;
+}
+
+.select-button-wrap {
+  margin-top: 10px;
+  button {
+    width: 150px;
+    font-size: 20px;
+    font-weight: bold;
+    font-family: inherit;
+    vertical-align: middle;
+    text-align: center;
+    cursor: pointer;
+    background-color: #454545;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 3px;
+    background-color: #58ba83;
+  }
+}
