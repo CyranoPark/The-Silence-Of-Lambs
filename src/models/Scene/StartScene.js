@@ -20,7 +20,7 @@ export default class StartScene {
     this.addPlane();
   }
   addPlane(){
-    const planeGeometry = new THREE.CircleGeometry(30, 100);
+    const planeGeometry = new THREE.CircleGeometry(40, 100);
     const planeMaterial = new THREE.MeshPhongMaterial({ color: 0x009933 });
     const plane = new THREE.Mesh(planeGeometry, planeMaterial);
     plane.receiveShadow = true;

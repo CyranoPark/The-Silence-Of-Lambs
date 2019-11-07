@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import App from '../component/App/App';
 import { getScores, postScore, checkValidUserName } from '../api'
-import { changeUserNameInput, startGame } from '../action';
+import { changeUserNameInput, startGame, completeGame } from '../action';
 
 const mapStateToProps = state => {
   const { name } = state.user;
@@ -22,6 +22,9 @@ const mapDispatchToProps = dispatch => {
     },
     handleGameStart() {
       dispatch(startGame());
+    },
+    finishGame(time, death) {
+      dispatch(completeGame(time, death));
     }
   };
 }

@@ -9,15 +9,12 @@ const App = props => {
     userName,
     gameProgress,
     handleGameStart,
-    changeUserNameInput
+    changeUserNameInput,
+    finishGame
   } = props;
 
   return (
     <div className="App">
-      <Route
-        exact path="/"
-        render={() => <Redirect to="/start" />}
-      />
       <Route
         exact path="/start"
         render={routeProps =>
@@ -32,12 +29,22 @@ const App = props => {
       />
       <Route
         exact path="/play"
-        render={routeProps =>
-          <Play
-            {...routeProps}
-            userName={userName}
-          />
-        }
+        render={routeProps => {
+          if (userName) {
+            return (
+              <Play
+                {...routeProps}
+                finishGame={finishGame}
+                userName={userName}
+              />
+            );
+          }
+          return <Redirect to="/start" />;
+        }}
+      />
+      <Route
+        path="/"
+        render={() => <Redirect to="/start" />}
       />
     </div>
   );

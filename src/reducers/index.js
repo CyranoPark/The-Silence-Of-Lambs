@@ -25,7 +25,9 @@ const user = (state = userInitialState, action) => {
 };
 
 const gameInitialState = {
-  gameProgress: BEFORE_START_GAME
+  gameProgress: BEFORE_START_GAME,
+  time: '',
+  score: 0
 }
 
 const game = (state = gameInitialState, action) => {

@@ -1,4 +1,4 @@
-import { WRITE_USER_NAME, START_GAME } from '../constants/actionType';
+import { WRITE_USER_NAME, START_GAME, COMPLETE_GAME } from '../constants/actionType';
 
 export const changeUserNameInput= userName => ({
   type: WRITE_USER_NAME,
@@ -8,3 +8,9 @@ export const changeUserNameInput= userName => ({
 export const startGame= () => ({
   type: START_GAME
 });
+
+export const completeGame = (time, death) => ({
+  type: COMPLETE_GAME,
+  time,
+  death
+})

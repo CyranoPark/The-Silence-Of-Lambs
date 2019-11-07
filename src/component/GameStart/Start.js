@@ -8,7 +8,6 @@ import Tutorial from './Tutorial';
 import StartScene from '../../models/Scene/StartScene';
 import TitleText from '../../models/Text/Title';
 import Lamb from '../../models/objects/Lamb';
-import Boy from '../../models/objects/Boy';
 
 import { checkValidUserName } from '../../api';
 import { PLAYING_GAME } from '../../constants/status';
@@ -54,12 +53,12 @@ export default class Start extends Component {
     lamb.group.rotation.y = 0.21 * Math.PI;
     startScene.scene.add(titleText.textMesh);
     startScene.scene.add(lamb.group);
-    lamb.died();
+
     const controls = new OrbitControls( startScene.camera, this.renderer.domElement );
     const animate = () => {
       requestAnimationFrame( animate );
 
-      // lamb.jump(0.05);
+      lamb.jump(0.05);
       controls.update();
       this.renderer.render( startScene.scene, startScene.camera );
     };

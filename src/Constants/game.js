@@ -1,22 +1,3 @@
-export const name = [
-  'KEN',
-  'HANJUN',
-  'SEONGJUN',
-  'KYUNGHWAN',
-  'IMHO',
-  'ILWOO',
-  'JAEYOUNG',
-  'JUYEON',
-  'HYEJIN',
-  'YERIN',
-  'DOI',
-  'HAKYUNG',
-  'DONGWOOK',
-  'SUJUNG',
-  'SEULA',
-  'SANGMIN'
-];
-
 export const lambColor = [
   {
     code: 0xffffff,

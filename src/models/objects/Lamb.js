@@ -2,36 +2,44 @@ import * as THREE from 'three';
 import optimerRegular from 'three/examples/fonts/droid/droid_sans_regular.typeface.json';
 
 export default class Lamb {
-  constructor(name, color, size) {
+  constructor(name, color, size, isLamb) {
     this.group = new THREE.Group();
     this.group.scale.x = size;
     this.group.scale.y = size;
     this.group.scale.z = size;
 
+    this.group.position.y = size * 1.7;
+
     this.woolMaterial = new THREE.MeshStandardMaterial({
       color: color,
       roughness: 1,
-      shading: true
+      flatShading: true
     });
     this.skinMaterial = new THREE.MeshStandardMaterial({
       color: 0xffaf8b,
       roughness: 1,
-      shading: true
+      flatShading: true
     });
     this.darkMaterial = new THREE.MeshStandardMaterial({
       color: 0x4b4553,
       roughness: 1,
-      shading: true
+      flatShading: true
     });
     this.bloodMaterial = new THREE.MeshStandardMaterial({
       color: 0xaf111c,
       roughness: 1,
-      shading: true
+      flatShading: true
+    });
+    this.wolfBodyMaterial = new THREE.MeshStandardMaterial({
+      color: 0x000000,
+      roughness: 1,
+      flatShading: true
     });
 
     this.name = name;
     this.size = size;
     this.color = color;
+    this.isLamb = isLamb;
 
     this.vAngle = 110;
     this.lambPosition = this.group.position.z;
@@ -40,7 +48,7 @@ export default class Lamb {
     this.drawBody();
     this.drawHead();
     this.drawLegs();
-    this.drawName();
+    this.drawName(this.name);
   }
 
   rad(degrees) {
@@ -49,11 +57,11 @@ export default class Lamb {
 
   drawBody() {
     const bodyGeometry = new THREE.IcosahedronGeometry(1.7, 0);
-    const body = new THREE.Mesh(bodyGeometry, this.woolMaterial);
-    body.castShadow = true;
-    body.receiveShadow = true;
+    this.body = new THREE.Mesh(bodyGeometry, this.woolMaterial);
+    this.body.castShadow = true;
+    this.body.receiveShadow = true;
 
-    this.group.add(body);
+    this.group.add(this.body);
   }
 
   drawHead() {
@@ -137,10 +145,10 @@ export default class Lamb {
     this.group.add(this.backLeftLeg);
   }
 
-  drawName() {
+  drawName(name) {
     const loader = new THREE.FontLoader();
     const font = loader.parse(optimerRegular);
-    const textGeometry = new THREE.TextGeometry(this.name, {
+    const textGeometry = new THREE.TextGeometry(name, {
       font,
       size: 0.5,
       height: 0.1,
@@ -176,14 +184,14 @@ export default class Lamb {
   drawBlood() {
     const bloodGeometry = new THREE.CircleGeometry(5, 100);
     this.bloodField = new THREE.Mesh(bloodGeometry, this.bloodMaterial);
-    this.bloodField.position.x = (this.size - 1) * 0.4 - 0.9;
+    this.bloodField.position.x = (this.size - 1) * 0.4 - 1;
     this.bloodField.rotation.y = this.rad(90);
     this.group.add(this.bloodField);
   }
 
   jump(speed) {
     this.vAngle += speed;
-    this.group.position.y = Math.sin(this.vAngle) + 2.58;
+    this.group.position.y = Math.sin(this.vAngle) + 1.58 + this.size;
 
     const legRotation = Math.sin(this.vAngle) * Math.PI / 6 + 0.4;
 
@@ -201,7 +209,7 @@ export default class Lamb {
   walk(speed) {
     this.vAngle += speed;
 
-    this.group.translateZ(speed);
+    this.group.translateZ(speed * 0.5);
     const legRotation = Math.sin(this.vAngle) * Math.PI / 6 + 0.4;
 
     this.frontRightLeg.rotation.x = -legRotation;
@@ -214,18 +222,19 @@ export default class Lamb {
     this.leftEar.rotation.z = -earRotation;
   }
 
-  died() {
+  died(callback) {
     let timer = 10;
     let frameNum = 100;
     const initPosition = this.group.position.x;
     const dieAnimation = () => {
       this.group.position.x -= 1.6 / frameNum;
       this.group.position.y -= 0.6 / frameNum;
-      this.group.rotation.z += 1.6 / frameNum;
+      this.group.rotation.z += 1.55 / frameNum;
 
-      if (this.group.position.x < initPosition - 1.6) {
+      if (this.group.position.x < initPosition - 1.63) {
         this.drawDeadEyes();
         this.drawBlood();
+        callback();
         return;
       }
       setTimeout(dieAnimation, timer);
@@ -233,8 +242,20 @@ export default class Lamb {
     setTimeout(dieAnimation, timer);
   }
 
+  changeWolf() {
+    const wolfBodyGeometry = new THREE.CylinderGeometry(1.5, 1.5, 3, 33);
+    this.wolfBody = new THREE.Mesh(wolfBodyGeometry, this.wolfBodyMaterial);
+    this.wolfBody.position.set(0, 0.12, 0.07);
+    this.wolfBody.rotation.x = this.rad(90);
+    this.group.remove(this.body);
+    this.group.remove(this.head);
+    this.group.remove(this.nameTag);
+    this.group.add(this.wolfBody);
+    this.drawName('WOLF');
+  }
+
   reset() {
-    this.group.position.y = 0.7 + this.size;
+    this.group.position.y = this.size * 1.7;
 
     this.frontRightLeg.rotation.z = 0;
     this.backRightLeg.rotation.z = 0;
