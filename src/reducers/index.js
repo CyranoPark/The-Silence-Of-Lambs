@@ -1,11 +1,19 @@
 import { combineReducers } from 'redux';
 import {
   WRITE_USER_NAME,
-  START_GAME
+  START_GAME,
+  START_SAVE_SCORE,
+  COMPLETE_SAVE_SCORE,
+  COMPLETE_GAME,
+  START_FETCH_SCORES,
+  FETCH_SCORES,
+  COMPLETE_FETCH_TOP_SCORES,
+  COMPLETE_FETCH_SCORES
 } from '../constants/actionType';
 import {
   BEFORE_START_GAME,
-  PLAYING_GAME
+  PLAYING_GAME,
+  CLEAR_GAME
 } from '../constants/status';
 
 const userInitialState = {
@@ -26,8 +34,13 @@ const user = (state = userInitialState, action) => {
 
 const gameInitialState = {
   gameProgress: BEFORE_START_GAME,
-  time: '',
-  score: 0
+  isSavingScore: false,
+  isLoadingResult: false,
+  clearTime: 0,
+  deathCount: 0,
+  score: 0,
+  topRankList: [],
+  rankList: []
 }
 
 const game = (state = gameInitialState, action) => {
@@ -36,6 +49,45 @@ const game = (state = gameInitialState, action) => {
       return Object.assign({...state}, {
         gameProgress: PLAYING_GAME,
       });
+
+      case START_SAVE_SCORE:
+        return Object.assign({...state}, {
+          isSavingScore: true,
+        });
+
+      case COMPLETE_SAVE_SCORE:
+        return Object.assign({...state}, {
+          isSavingScore: false,
+        });
+
+      case COMPLETE_GAME:
+        return Object.assign({...state}, {
+          gameProgress: CLEAR_GAME,
+          clearTime: action.clearTime,
+          deathCount: action.deathCount,
+          score: action.score
+        });
+
+      case START_FETCH_SCORES:
+        return Object.assign({...state}, {
+          isLoadingResult: true,
+        });
+
+      case COMPLETE_FETCH_TOP_SCORES:
+        return Object.assign({...state}, {
+          isLoadingResult: false,
+          topRankList: action.scores
+        });
+
+      case FETCH_SCORES:
+        return Object.assign({...state}, {
+          rankList: action.scores
+        });
+
+      case COMPLETE_FETCH_SCORES:
+        return Object.assign({...state}, {
+          isLoadingResult: false,
+        });
 
     default:
       return state;

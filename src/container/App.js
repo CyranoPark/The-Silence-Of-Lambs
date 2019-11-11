@@ -1,21 +1,46 @@
 import { connect } from 'react-redux';
 import App from '../component/App/App';
-import { getScores, postScore, checkValidUserName } from '../api'
-import { changeUserNameInput, startGame, completeGame } from '../action';
+import { getScores, postScore, getPrevScores } from '../api'
+import { deathCountToPenaltyTime } from '../utils';
+import {
+  changeUserNameInput,
+  startGame,
+  completeGame,
+  startSaveScore,
+  completeSaveScore,
+  startFetchScores,
+  fetchScores,
+  completeFetchTopScores,
+  completeFetchScores
+} from '../action';
 
 const mapStateToProps = state => {
   const { name } = state.user;
-  const { gameProgress } = state.game;
+  const {
+    gameProgress,
+    isSavingScore,
+    clearTime,
+    deathCount,
+    score,
+    isLoadingResult,
+    topRankList,
+    rankList
+  } = state.game;
+
   return {
     userName: name,
-    gameProgress
+    gameProgress,
+    isSavingScore,
+    clearTime,
+    deathCount,
+    score,
+    isLoadingResult,
+    topRankList,
+    rankList
   };
 }
 
 const mapDispatchToProps = dispatch => {
-  // postScore('hanjun', 'test', 123,24,124,123).then(() => {
-  //   checkValidUserName('hanjun').then((data) => console.log(data))
-  // })
   return {
     changeUserNameInput(userName) {
       dispatch(changeUserNameInput(userName));
@@ -23,9 +48,59 @@ const mapDispatchToProps = dispatch => {
     handleGameStart() {
       dispatch(startGame());
     },
-    finishGame(time, death) {
-      dispatch(completeGame(time, death));
-    }
+    saveScore(name, clearTime, deathCount) {
+      const totalTime = clearTime + deathCountToPenaltyTime(deathCount);
+
+      startSaveScore();
+
+      postScore(name, new Date().toISOString(), clearTime, deathCount, totalTime)
+        .then(() => {
+          dispatch(completeSaveScore());
+          dispatch(completeGame(clearTime, deathCount, totalTime));
+        })
+        .catch(() => {
+          console.log('save failed');
+        })
+    },
+    fetchTopScores(callback) {
+      dispatch(startFetchScores());
+      getScores(3, 0)
+        .then(data => {
+          if (!data.length) {
+            dispatch(completeFetchScores());
+            callback();
+            return;
+          }
+          dispatch(completeFetchTopScores(data));
+          callback();
+        });
+    },
+    fetchScores(limit, start, callback) {
+      dispatch(startFetchScores());
+      getScores(limit, start)
+        .then(data => {
+          if (!data.length) {
+            dispatch(completeFetchScores());
+            return;
+          }
+          dispatch(fetchScores(data));
+          dispatch(completeFetchScores());
+          callback();
+        });
+    },
+    fetchPrevScores(limit, end, callback) {
+      dispatch(startFetchScores());
+      getPrevScores(limit, end)
+        .then(data => {
+          if (!data.length) {
+            dispatch(completeFetchScores());
+            return;
+          }
+          dispatch(fetchScores(data));
+          dispatch(completeFetchScores());
+          callback();
+        });
+    },
   };
 }
 

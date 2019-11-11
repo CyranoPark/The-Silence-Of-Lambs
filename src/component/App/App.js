@@ -2,15 +2,26 @@ import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
 import Start from '../GameStart/Start';
 import Play from '../GamePlay/Play';
+import Result from '../GameResult/Result';
 import './App.scss';
 
 const App = props => {
   const {
     userName,
     gameProgress,
+    isSavingScore,
+    clearTime,
+    deathCount,
+    score,
+    isLoadingResult,
+    topRankList,
+    rankList,
     handleGameStart,
     changeUserNameInput,
-    finishGame
+    saveScore,
+    fetchScores,
+    fetchPrevScores,
+    fetchTopScores
   } = props;
 
   return (
@@ -34,8 +45,13 @@ const App = props => {
             return (
               <Play
                 {...routeProps}
-                finishGame={finishGame}
+                gameProgress={gameProgress}
+                finishGame={saveScore}
                 userName={userName}
+                isSavingScore={isSavingScore}
+                clearTime={clearTime}
+                deathCount={deathCount}
+                score={score}
               />
             );
           }
@@ -43,9 +59,27 @@ const App = props => {
         }}
       />
       <Route
+        exact path="/result"
+        render={routeProps =>
+          <Result
+            {...routeProps}
+            userName={userName}
+            clearTime={clearTime}
+            deathCount={deathCount}
+            score={score}
+            isLoadingResult={isLoadingResult}
+            topRankList={topRankList}
+            rankList={rankList}
+            fetchScores={fetchScores}
+            fetchPrevScores={fetchPrevScores}
+            fetchTopScores={fetchTopScores}
+          />
+        }
+      />
+      {/* <Route
         path="/"
         render={() => <Redirect to="/start" />}
-      />
+      /> */}
     </div>
   );
 }

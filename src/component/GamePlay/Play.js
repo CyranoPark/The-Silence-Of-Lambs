@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import moment from 'moment';
 import _ from 'lodash';
 
 import GameScene from '../../models/Scene/GameScene';
@@ -13,7 +13,7 @@ import Clock from './Clock';
 import HintList from './HintList';
 import SelectBox from './SelectBox';
 
-
+import { durationToMillisecond, millisecondToDuration } from '../../utils';
 import {
   sceneWidth,
   sceneHeight,
@@ -21,6 +21,7 @@ import {
   hoveredLambHex,
   commonHex
 } from '../../constants/style';
+import { CLEAR_GAME } from '../../constants/status';
 import { lambColor, lambSize } from '../../constants/game';
 import './Play.scss';
 
@@ -37,6 +38,7 @@ export default class Play extends Component {
     this.state = {
       time: '00:00:00',
       selectedLamb: null,
+      isKillingLamb: false,
       deathLambs: 0
     };
   }
@@ -79,6 +81,7 @@ export default class Play extends Component {
     this.boyAnimation();
 
     this.controls.update();
+    this.onWindowResize();
     this.renderer.render( this.gameScene.scene, this.gameScene.camera );
   }
 
@@ -109,7 +112,7 @@ export default class Play extends Component {
   };
 
   boyAnimation = () => {
-    if (!this.state.selectedLamb) {
+    if (!this.state.selectedLamb && !this.state.isKillingLamb) {
       if (this.boy.group.position.distanceTo(this.sceneCenter) > 35) {
         this.boy.group.translateZ(-1);
         this.boy.group.rotation.y =  THREE.Math.radToDeg(Math.random() * 2 * Math.PI);
@@ -156,28 +159,38 @@ export default class Play extends Component {
 
   killLamb = () => {
     const targetLamb = _.remove(this.targetLambs, lamb => lamb.group.uuid === this.state.selectedLamb);
+    this.setState({
+      selectedLamb: null,
+      isKillingLamb: true
+    });
+
     this.groupChangeColor(targetLamb[0].group, commonHex);
 
     targetLamb[0].reset();
     this.boy.reset();
-
     this.boy.hit();
 
     if (targetLamb[0].isLamb) {
       targetLamb[0].died(() => {
         this.setState({
-          selectedLamb: null,
+          isKillingLamb: false,
           deathLambs: this.state.deathLambs + 1
         });
       });
     } else {
       targetLamb[0].died(() => {
         targetLamb[0].changeWolf();
-        this.setState({ selectedLamb: null });
+        this.setState({ isKillingLamb: false });
         this.clearGame();
       });
     }
   };
+
+  onWindowResize = () => {
+    this.gameScene.camera.aspect = window.innerWidth / window.innerHeight;
+    this.gameScene.camera.updateProjectionMatrix();
+    this.renderer.setSize( window.innerWidth, window.innerHeight );
+  }
 
   onMouseMove = event => {
     this.mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
@@ -262,7 +275,7 @@ export default class Play extends Component {
     let counter = 1;
 
     this.timer = setInterval(() => this.setState({
-      time: moment().minute(0).second(0).millisecond(counter++ * 50).format('mm:ss:SS')
+      time: millisecondToDuration(counter++ * 50)
     }), 50);
   };
 
@@ -271,15 +284,26 @@ export default class Play extends Component {
   };
 
   clearGame = () => {
-    const { finishGame } = this.props;
+    const { userName, finishGame } = this.props;
     const { deathLambs } = this.state;
-    const clearTime = moment.duration(this.state.time).asMilliseconds();
+    const timeArr = this.state.time.split(':');
+    const durationTime = {
+      milliseconds: timeArr[2],
+      seconds: timeArr[1],
+      minutes: timeArr[0],
+    }
+    const clearTime = durationToMillisecond(durationTime);
     this.stopTimer();
-    finishGame(clearTime, deathLambs)
+    finishGame(userName, clearTime, deathLambs);
   }
 
   render() {
-    const { userName } = this.props;
+    const { userName, gameProgress } = this.props;
+    console.log(gameProgress);
+    if (gameProgress === CLEAR_GAME) {
+      return <Redirect to='/result' />
+    }
+
     return (
       <>
         <div>

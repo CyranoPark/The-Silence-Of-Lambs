@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import {
+  sceneBackgroundColor,
   sceneWidth,
   sceneHeight
 } from '../../constants/style';
@@ -13,7 +14,7 @@ export default class GameScene {
     this.camera.lookAt(this.cameraTarget);
 
     this.scene = new THREE.Scene();
-    this.scene.background = new THREE.Color( 0x282c34 );
+    this.scene.background = new THREE.Color( sceneBackgroundColor );
     // this.scene.fog = new THREE.Fog( 0xffffff, 250, 1400 );
 
     // var axes = new THREE.AxisHelper(10);

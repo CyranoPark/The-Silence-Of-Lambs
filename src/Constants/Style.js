@@ -1,3 +1,5 @@
+export const sceneBackgroundColor = 0x000027;
+
 export const sceneWidth = window.innerWidth;
 export const sceneHeight = window.innerHeight;
 export const titleSceneWidth = window.innerWidth;

@@ -184,7 +184,7 @@ export default class Lamb {
   drawBlood() {
     const bloodGeometry = new THREE.CircleGeometry(5, 100);
     this.bloodField = new THREE.Mesh(bloodGeometry, this.bloodMaterial);
-    this.bloodField.position.x = (this.size - 1) * 0.4 - 1;
+    this.bloodField.position.x = (this.size - 1) * 0.4 - this.size * 0.9;
     this.bloodField.rotation.y = this.rad(90);
     this.group.add(this.bloodField);
   }

@@ -1,0 +1,158 @@
+$result-text-color: #ffffff;
+$highlight-color: #FDD756;
+
+h1 {
+  font-size: 40px;
+  margin: 10px;
+  color: $result-text-color;
+}
+
+h2 {
+  font-size: 30px;
+  margin: 20px;
+  color: $result-text-color;
+}
+
+.result-container {
+  width: 50%;
+  margin: auto;
+  color: $result-text-color;
+  font-size: 20px;
+}
+
+.rank-container, .score-container {
+  width: 80%;
+  margin: auto;
+}
+
+.rank-container {
+  display: flex;
+}
+.result-table {
+  width: 100%;
+  font-size: 25px;
+  font-weight: bold;
+  & td {
+    width: 50%;
+    height: 20px;
+  }
+
+  .score-value {
+    color: $highlight-color;
+    font-size: 30px;
+  }
+}
+
+.top-ranker-container {
+  font-weight: bold;
+  margin: auto;
+
+  .top-rank-number {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 30px;
+    top: 100%;
+    left: 50%;
+    margin-top: -15px;
+    margin-left: -15px;
+    width: 30px;
+    height: 30px;
+    border-radius: 15px;
+    padding: 1px;
+    color: black;
+    background-color: $highlight-color;
+  }
+
+  .top-rank {
+    margin: auto;
+  }
+
+  .rank-first {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    width: 100px;
+    height: 100px;
+    border: 1px solid $highlight-color;
+    border-radius: 50px;
+  }
+}
+
+.top-rank-bottom {
+  display: flex;
+  justify-content: center;
+  .rank-second {
+    @extend .rank-first;
+  }
+
+  .rank-third {
+    @extend .rank-first;
+  }
+}
+
+.rank-list {
+  width: 50%;
+  margin: auto;
+  ol {
+    list-style: none;
+    padding: 0;
+  }
+}
+
+.rank-pagination {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  font-size: 30px;
+
+  & > div {
+    width: 50%;
+  }
+}
+
+.highlight {
+  border-radius: 30px;
+  border: 1px solid $highlight-color;
+}
+
+.rank-list-item {
+  display: flex;
+  position: relative;
+  padding: 2px;
+  height: 25px;
+
+  div {
+    width: 40%;
+    display: inline-block;
+  }
+  .rank-number {
+    text-align: right;
+    width: 50px;
+  }
+
+  .rank-score {
+    color: $highlight-color;
+  }
+
+  &.highlight {
+    border-radius: 30px;
+    border: 1px solid $highlight-color;
+  }
+}
+
+.new-icon {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 30px;
+  height: 30px;
+}
+
+.div-line {
+  width: 100%;
+  margin: 5px;
+}

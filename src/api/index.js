@@ -10,30 +10,58 @@ const config = {
 
 firebase.initializeApp(config);
 
-export const postScore = (name, timestamp, clearTime, deathCount, difficulty, score) => {
-  return firebase.database().ref('scores/' + name).set({
+export const postScore = (name, timestamp, clearTime, deathCount, totalTime) => {
+  const newRef = firebase.database().ref('scores').push();
+  return newRef.set({
     name,
-    created_at : timestamp,
-    clear_time : clearTime,
-    death_count : deathCount,
-    difficulty,
-    score
+    created_at: timestamp,
+    clear_time: clearTime,
+    death_count: deathCount,
+    total_time: totalTime
   });
 };
 
-export const getScores = () => {
-  return firebase.database().ref('scores').once('value')
-    .then(function(snapshot) {
-      return snapshot.val();
+export const getScores = (limit, start) => {
+  return firebase.database().ref('scores')
+    .orderByChild('total_time')
+    .startAt(start)
+    .limitToFirst(limit)
+    .once('value')
+    .then(snapshot => {
+      if (!snapshot.val()) {
+        return [];
+      }
+      const scores = Object.values(snapshot.val());
+      scores.sort((a, b) => a.total_time - b.total_time);
+      return scores;
+    });
+};
+
+export const getPrevScores = (limit, end) => {
+  return firebase.database().ref('scores')
+    .orderByChild('total_time')
+    .endAt(end)
+    .limitToLast(limit)
+    .once('value')
+    .then(snapshot => {
+      if (!snapshot.val()) {
+        return [];
+      }
+      const scores = Object.values(snapshot.val());
+      scores.sort((a, b) => a.total_time - b.total_time);
+      return scores;
     });
 };
 
 export const checkValidUserName = name => {
-  return firebase.database().ref('scores/' + name).once('value')
-  .then(function(snapshot) {
-    if (snapshot.val()) {
-      return false;
-    }
-    return true;
-  });
+  return firebase.database().ref('scores')
+    .orderByChild('name')
+    .equalTo(name)
+    .once('value')
+    .then(snapshot => {
+      if (snapshot.val()) {
+        return false;
+      }
+      return true;
+    });
 };
