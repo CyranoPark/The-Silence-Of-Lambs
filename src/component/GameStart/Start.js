@@ -10,12 +10,17 @@ import Ranking from '../GameResult/Ranking';
 import StartScene from '../../models/Scene/StartScene';
 import TitleText from '../../models/Text/Title';
 import Lamb from '../../models/objects/Lamb';
-import bgm from '../../asset/audio/bgm.mp3';
 import AppLoading from '../App/AppLoading';
+
+import bgm from '../../asset/audio/bgm.mp3';
+import startGif from '../../asset/gif/start.gif';
+import hintGif from '../../asset/gif/hint.gif';
+import killGif from '../../asset/gif/kill.gif';
+import killWolfGif from '../../asset/gif/killwolf.gif';
 
 import { checkValidUserName } from '../../api';
 import { PLAYING_GAME } from '../../constants/status';
-import { lambColor, lambSize } from '../../constants/game';
+import { tutorialStep, lambColor, lambSize } from '../../constants/game';
 
 import {
   sceneWidth,
@@ -32,7 +37,8 @@ export default class Start extends Component {
       isValidName: true,
       isOpenTutorial: false,
       isOpenRanking: false,
-      rankingPage: 0
+      rankingPage: 0,
+      currentStep: 0
     }
   }
 
@@ -129,6 +135,44 @@ export default class Start extends Component {
       );
     }
   }
+
+  renderTutorial = () => {
+    let currentGif;
+    switch (this.state.currentStep) {
+      case 0:
+        currentGif = startGif;
+        break;
+
+      case 1:
+        currentGif = hintGif;
+        break;
+
+      case 2:
+        currentGif = killGif;
+        break;
+
+      case 3:
+        currentGif = killWolfGif;
+        break;
+
+      default:
+        currentGif = startGif;
+        break;
+    }
+
+    return (
+      <Tutorial
+        gifImage={currentGif}
+        step={this.state.currentStep + 1}
+        description={tutorialStep[this.state.currentStep]}
+        onModalBodyClick={this.handleStopEvent}
+        closeModal={this.handleModalClose}
+        prevTutorialButtonClick={this.viewPrevTutorial}
+        nextTutorialButtonClick={this.viewNextTutorial}
+      />
+    );
+  }
+
   renderModal = () => {
     const { isOpenTutorial, isOpenRanking } = this.state;
     const {
@@ -139,12 +183,7 @@ export default class Start extends Component {
     } = this.props;
 
     if(isOpenTutorial) {
-      return (
-        <Tutorial
-          onModalBodyClick={this.handleStopEvent}
-          closeModal={this.handleModalClose}
-        />
-      );
+      return this.renderTutorial();
     }
 
     if(isOpenRanking) {
@@ -224,6 +263,18 @@ export default class Start extends Component {
   handleStopEvent = event => {
     event.stopPropagation();
   }
+
+  viewNextTutorial = () => {
+    if (this.state.currentStep < 3) {
+      this.setState({ currentStep: this.state.currentStep + 1 });
+    }
+  };
+
+  viewPrevTutorial = () => {
+    if (this.state.currentStep > 0) {
+      this.setState({ currentStep: this.state.currentStep - 1 });
+    }
+  };
 
   render() {
     const { gameProgress } = this.props;

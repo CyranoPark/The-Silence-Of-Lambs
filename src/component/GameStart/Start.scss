@@ -105,8 +105,12 @@ input[type=submit] {
 
   .tutorial-video {
     width: 90%;
-    margin: auto;
     height: 300px;
+    margin: auto;
+  }
+
+  .tutorial-video img {
+    width: 100%;
     border-bottom: 1px solid $border-color;
   }
 
@@ -155,6 +159,7 @@ input[type=submit] {
 
 .tutorial-comment {
   width: 80%;
+  font-size: 20px;
   &-step {
     font-size: 30px;
     font-weight: bold;

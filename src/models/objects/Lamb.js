@@ -14,21 +14,25 @@ export default class Lamb {
       roughness: 1,
       flatShading: true
     });
+
     this.skinMaterial = new THREE.MeshStandardMaterial({
       color: 0xffaf8b,
       roughness: 1,
       flatShading: true
     });
+
     this.darkMaterial = new THREE.MeshStandardMaterial({
       color: 0x4b4553,
       roughness: 1,
       flatShading: true
     });
+
     this.bloodMaterial = new THREE.MeshStandardMaterial({
       color: 0xaf111c,
       roughness: 1,
       flatShading: true
     });
+
     this.wolfBodyMaterial = new THREE.MeshStandardMaterial({
       color: 0x000000,
       roughness: 1,

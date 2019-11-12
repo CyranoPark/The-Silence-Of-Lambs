@@ -16,19 +16,21 @@ const Tutorial = props => {
             <FaWindowClose onClick={props.closeModal} />
           </div>
         </div>
-        <div className='tutorial-video'></div>
+        <div className='tutorial-video'>
+          <img src={props.gifImage} alt={props.step} />
+        </div>
         <div className='tutorial-bottom'>
           <div className='tutorial-comment'>
             <div className='tutorial-comment-step'>
-              STEP 1.
+              STEP {props.step}.
             </div>
             <div>
-              양들을 때려 잡는다.
+              {props.description}
             </div>
           </div>
           <div className='tutorial-page'>
-            <FaRegArrowAltCircleLeft />
-            <FaRegArrowAltCircleRight />
+            <FaRegArrowAltCircleLeft onClick={props.prevTutorialButtonClick}/>
+            <FaRegArrowAltCircleRight onClick={props.nextTutorialButtonClick} />
           </div>
         </div>
       </div>
