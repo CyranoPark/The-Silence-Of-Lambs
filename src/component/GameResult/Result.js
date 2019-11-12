@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom';
 
 import Ranking from './Ranking';
 import Score from './Score';
 
 import { deathCountToPenaltyTime } from '../../utils';
+import { CLEAR_GAME } from '../../constants/status';
 import './Result.scss';
 
 class Result extends Component {
@@ -22,6 +24,11 @@ class Result extends Component {
   }
 
   componentDidMount() {
+    const { gameProgress } = this.props;
+    if (gameProgress !== CLEAR_GAME) {
+      return;
+    }
+
     this.props.fetchTopScores(this.fetchAdditionalScores);
     this.renderScore();
   }
@@ -52,7 +59,7 @@ class Result extends Component {
     const { clearTime } = this.props;
 
     const timeScoreInterval = setInterval(() => {
-      const nextTime = this.state.timeScore + 100;
+      const nextTime = this.state.timeScore + 1000;
       if (nextTime >= clearTime) {
         clearInterval(timeScoreInterval);
         this.setState({
@@ -75,12 +82,6 @@ class Result extends Component {
     const deathCountInterval = setInterval(() => {
       if (this.state.deathScore === deathCount) {
         clearInterval(deathCountInterval);
-
-        this.setState({
-          deathScore: deathCount,
-          deathPenaltyScore: deathCountToPenaltyTime(deathCount),
-          totalScore: this.state.totalScore + deathCountToPenaltyTime(deathCount)
-        });
         return;
       }
 
@@ -94,7 +95,13 @@ class Result extends Component {
   };
 
   render() {
-    const { userName, topRankList, rankList } = this.props;
+    const {
+      userName,
+      topRankList,
+      rankList,
+      gameProgress,
+      onRestartButtonClick,
+    } = this.props;
     const {
       timeScore,
       deathScore,
@@ -103,10 +110,21 @@ class Result extends Component {
       rankingPage
     } = this.state;
 
+    if (gameProgress !== CLEAR_GAME) {
+      return <Redirect to='/start' />
+    }
     return (
       <>
         <h1>Misson Complete!</h1>
         <div className='result-container'>
+          <div>
+            <button
+              className='restart-button'
+              onClick={onRestartButtonClick}
+            >
+              RESTART
+            </button>
+          </div>
           <Score
             userName={userName}
             clearTime={timeScore}

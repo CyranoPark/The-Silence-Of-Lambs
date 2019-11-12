@@ -4,20 +4,25 @@ import { getScores, postScore, getPrevScores } from '../api'
 import { deathCountToPenaltyTime } from '../utils';
 import {
   changeUserNameInput,
+  startLoadingGame,
+  completeLoadingGame,
   startGame,
+  restartGame,
   completeGame,
   startSaveScore,
   completeSaveScore,
   startFetchScores,
   fetchScores,
   completeFetchTopScores,
-  completeFetchScores
+  completeFetchScores,
+  initializeScores
 } from '../action';
 
 const mapStateToProps = state => {
   const { name } = state.user;
   const {
     gameProgress,
+    isLoadingGame,
     isSavingScore,
     clearTime,
     deathCount,
@@ -29,6 +34,7 @@ const mapStateToProps = state => {
 
   return {
     userName: name,
+    isLoadingGame,
     gameProgress,
     isSavingScore,
     clearTime,
@@ -45,8 +51,17 @@ const mapDispatchToProps = dispatch => {
     changeUserNameInput(userName) {
       dispatch(changeUserNameInput(userName));
     },
+    handleStartButtonClick() {
+      dispatch(startLoadingGame());
+    },
+    completeStartLoading() {
+      dispatch(completeLoadingGame());
+    },
     handleGameStart() {
       dispatch(startGame());
+    },
+    handleGameRestart() {
+      dispatch(restartGame());
     },
     saveScore(name, clearTime, deathCount) {
       const totalTime = clearTime + deathCountToPenaltyTime(deathCount);
@@ -101,6 +116,9 @@ const mapDispatchToProps = dispatch => {
           callback();
         });
     },
+    initRankingList() {
+      dispatch(initializeScores());
+    }
   };
 }
 

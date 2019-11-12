@@ -12,11 +12,17 @@ const StartForm = props => {
         </>
       );
     }
-  }
+  };
 
   return (
-    <div className='start-form-modal' >
+    <>
       <div className='tutorial-button-wrap'>
+        <button
+          className='ranking-open-button'
+          onClick={props.onRankingButtonClick}
+        >
+          랭킹보기
+        </button>
         <button
           className='tutorial-open-button'
           onClick={props.onTutorialButtonClick}
@@ -50,7 +56,7 @@ const StartForm = props => {
           <input type='submit' value='START!' />
         </div>
       </form>
-    </div>
+    </>
   );
 };
 

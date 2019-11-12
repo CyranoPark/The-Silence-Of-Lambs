@@ -12,7 +12,7 @@ $modal-background-color: rgba(0, 0, 0, 0.479);
 .play-time {
   position: absolute;
   left: 50%;
-  margin-left: -150px;
+  margin-left: -160px;
   font-size: 40px;
   font-weight: bold;
   color: $text-color;
@@ -31,18 +31,15 @@ $modal-background-color: rgba(0, 0, 0, 0.479);
   }
 
   .time {
-      // letter-spacing: 0.05em;
       font-size: 60px;
       padding: 5px 0;
   }
 
   .clock-title {
-      // letter-spacing: 0.1em;
       font-size: 30px;
   }
 
   .text {
-      // letter-spacing: 0.1em;
       font-size: 12px;
       padding: 20px 0 0;
   }
@@ -53,7 +50,7 @@ $modal-background-color: rgba(0, 0, 0, 0.479);
   left: 85%;
   top: 10px;
   width: 300px;
-  max-height: 400px;
+  max-height: 300px;
   margin-left: -150px;
   font-size: 40px;
   font-weight: bold;
@@ -78,7 +75,7 @@ $modal-background-color: rgba(0, 0, 0, 0.479);
   position: absolute;
   left: 50%;
   bottom: 0;
-  margin-left: -150px;
+  margin-left: -180px;
   width: 300px;
   height: 100px;
   background-color: $modal-background-color;
@@ -89,8 +86,123 @@ $modal-background-color: rgba(0, 0, 0, 0.479);
   color: $text-color;
 }
 
+.rockPaperScissors-modal {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  bottom: 0;
+  margin-left: -330px;
+  margin-top: -150px;
+  width: 600px;
+  height: 300px;
+  background-color: $modal-background-color;
+  padding: 30px;
+  border-radius: 50px;
+  font-size: 25px;
+  font-weight: bold;
+  color: $text-color;
+}
+
+.rockPaperScissors {
+  display: flex;
+  justify-content: center;
+  .rockPaperScissors-icon {
+    width: 150px;
+    color: white;
+  }
+}
+
+.rockPaperScissors-result {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  .game-result {
+    font-size: 40px;
+    font-weight: bold;
+  }
+
+  .rockPaperScissors-icon {
+    width: 200px;
+    color: white;
+  }
+
+  .rockPaperScissors-icon-reverse {
+    width: 200px;
+    color: white;
+    transform: rotateX(180deg);
+    transform: rotateY(180deg);
+  }
+}
+
+.user-select {
+  margin: 10px auto;
+
+  & > div {
+    display: inline-block;
+    width: 150px;
+    margin: 20px;
+    border: 2px solid white;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+}
+
+.hint-container {
+  button {
+    background: transparent;
+    border: 1px solid white;
+    border-radius: 5px;
+    padding: 0.5em 1em;
+    font-size: 12px;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+  }
+}
+
 .select-button-wrap {
   margin-top: 10px;
+  button {
+    width: 150px;
+    font-size: 20px;
+    font-weight: bold;
+    font-family: inherit;
+    vertical-align: middle;
+    text-align: center;
+    cursor: pointer;
+    background-color: #454545;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 3px;
+    background-color: #58ba83;
+  }
+}
+
+.music-onoff-button {
+  position: absolute;
+  top: 100px;
+  left: 10px;
+  svg {
+    font-size: 40px;
+    color: white;
+  }
+}
+
+.mission-complete-modal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  left: 50%;
+  top: 50%;
+  margin-left: -150px;
+  margin-top: -150px;
+  border-radius: 20px;
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.479);
+
   button {
     width: 150px;
     font-size: 20px;

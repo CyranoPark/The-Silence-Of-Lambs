@@ -1,6 +1,5 @@
 import React from 'react';
-import moment from 'moment';
-import { millisecondToDuration, deathCountToPenaltyTime } from '../../utils';
+import { millisecondToDuration } from '../../utils';
 
 const Score = props => {
   const {

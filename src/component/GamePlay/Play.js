@@ -12,8 +12,18 @@ import Logo from './Logo';
 import Clock from './Clock';
 import HintList from './HintList';
 import SelectBox from './SelectBox';
+import RockPaperScissors from './RockPaperScissors';
+import MissonCompleteModal from './MissonCompleteModal';
 
-import { durationToMillisecond, millisecondToDuration } from '../../utils';
+import { FaVolumeUp, FaVolumeMute } from "react-icons/fa";
+import deathBgm from '../../asset/audio/death.mp3';
+import bgm from '../../asset/audio/bgm.mp3';
+
+import {
+  durationToMillisecond,
+  millisecondToDuration,
+  checkResultRockPaperScissorsGame
+} from '../../utils';
 import {
   sceneWidth,
   sceneHeight,
@@ -22,7 +32,7 @@ import {
   commonHex
 } from '../../constants/style';
 import { CLEAR_GAME } from '../../constants/status';
-import { lambColor, lambSize } from '../../constants/game';
+import { lambColor, lambSize, WIN } from '../../constants/game';
 import './Play.scss';
 
 export default class Play extends Component {
@@ -38,17 +48,29 @@ export default class Play extends Component {
     this.state = {
       time: '00:00:00',
       selectedLamb: null,
+      wolfCharacter: {},
+      submittedByUser: null,
+      submittedByLamb: null,
+      rockPaperScissorsResult: null,
+      hintMessages: [],
       isKillingLamb: false,
-      deathLambs: 0
+      isOpenHintWindow: false,
+      deathLambs: 0,
+      isMusicOn: true,
+      isClearGame: false
     };
   }
 
   componentDidMount() {
+    this.bgm = new Audio(bgm);
+    this.bgm.play();
+
     this.renderScene();
     this.startTimer();
   }
 
   componentWillUnmount() {
+    this.bgm.pause();
     window.removeEventListener('mousemove', this.onMouseMove);
     window.removeEventListener('click', this.onMouseClick);
   }
@@ -125,11 +147,10 @@ export default class Play extends Component {
     this.characters = this.selectLambCharacter();
     this.characters.forEach((character, i) => {
       const { isLamb, color, size, position } = character;
-      const lambName = isLamb ? 'LAMB' : 'WOLF';
-      const lamb = new Lamb(lambName, color, size, isLamb);
+      const lamb = new Lamb(color.code, size.size, isLamb);
 
       lamb.group.position.x = position.x;
-      lamb.group.position.y = position.y + size - 1;
+      lamb.group.position.y = position.y + size.size - 0.5;
       lamb.group.position.z = position.z;
       lamb.group.rotation.y = Math.PI * Math.random() * 2;
 
@@ -137,8 +158,9 @@ export default class Play extends Component {
       this.gameScene.scene.add(lamb.group);
     });
 
+    this.characters = _.remove(this.characters, character => character.isLamb);
     this.boy = new Boy();
-    this.boy.group.position.set(0, 1.7, 0);
+    this.boy.group.position.set(0, 2.2, 0);
     this.gameScene.scene.add(this.boy.group);
   }
 
@@ -171,6 +193,8 @@ export default class Play extends Component {
     this.boy.hit();
 
     if (targetLamb[0].isLamb) {
+      const audio = new Audio(deathBgm);
+      audio.play();
       targetLamb[0].died(() => {
         this.setState({
           isKillingLamb: false,
@@ -198,6 +222,7 @@ export default class Play extends Component {
   };
 
   onMouseClick = () => {
+    this.closeHintWindow();
     if (this.intersects.length > 0) {
       let isLambClicked = false;
       const clickedObj = this.intersects[0].object.parent;
@@ -237,8 +262,8 @@ export default class Play extends Component {
     lambColor.forEach(color => {
       lambSize.forEach(size => {
         characters.push({
-          color: color.code,
-          size: size.size,
+          color: color,
+          size: size,
           isLamb: true
         });
       });
@@ -247,7 +272,15 @@ export default class Play extends Component {
     characters.splice(this.lamsNumber);
     positions.forEach((position, i) => characters[i].position = position);
 
-    _.sample(characters).isLamb = false;
+    const wolf = _.sample(characters);
+    wolf.isLamb = false;
+
+    this.setState({
+      wolfCharacter: {
+        color: wolf.color,
+        size: wolf.size
+      }
+    })
 
     return _.shuffle(characters);
   };
@@ -284,6 +317,72 @@ export default class Play extends Component {
   };
 
   clearGame = () => {
+    this.stopTimer();
+    this.setState({ isClearGame: true });
+  };
+
+  openHintWindow = () => {
+    this.setState({ isOpenHintWindow: true });
+  };
+
+  closeHintWindow = () => {
+    this.setState({
+      isOpenHintWindow: false,
+      submittedByUser: null,
+      submittedByLamb: null,
+      rockPaperScissorsResult: null
+    });
+  };
+
+  restartHintWindow = () => {
+    this.setState({
+      submittedByUser: null,
+      submittedByLamb: null,
+      rockPaperScissorsResult: null
+    });
+  };
+
+  playRockPaperScissorsGame = submittedByUser => {
+    const submittedByLamb = new Date() % 3;
+    let result = checkResultRockPaperScissorsGame(submittedByUser, submittedByLamb);
+    //test
+    result = WIN;
+    //
+    this.setState({
+      submittedByUser,
+      submittedByLamb,
+      hintMessages: result === WIN
+        ? [...this.state.hintMessages, this.makeHintMessage()]
+        : this.state.hintMessages,
+      rockPaperScissorsResult: result
+    });
+  };
+
+  makeHintMessage = () => {
+    const selectedCharacter = _.sample(this.characters);
+    if (!selectedCharacter) {
+      return '이젠 찾을 수 있을껄?'
+    }
+    if (selectedCharacter.color.code === this.state.wolfCharacter.color.code) {
+      this.characters = this.characters.filter(character => character.size.size === this.state.wolfCharacter.size.size);
+      return `늑대의 크기는 ${this.state.wolfCharacter.size.name}`;
+    } else {
+      this.characters = this.characters.filter(character => character.color.code !== selectedCharacter.color.code);
+      return `늑대는 ${selectedCharacter.color.name}이 아니다.`
+    }
+  };
+
+  musicOn = () => {
+    this.bgm.play();
+    this.setState({ isMusicOn: true });
+  };
+
+  musicOff = () => {
+    this.bgm.pause();
+    this.setState({ isMusicOn: false });
+  };
+
+  saveClearData = () => {
     const { userName, finishGame } = this.props;
     const { deathLambs } = this.state;
     const timeArr = this.state.time.split(':');
@@ -293,27 +392,78 @@ export default class Play extends Component {
       minutes: timeArr[0],
     }
     const clearTime = durationToMillisecond(durationTime);
-    this.stopTimer();
     finishGame(userName, clearTime, deathLambs);
+  }
+
+  handleStopEvent = event => {
+    event.stopPropagation();
   }
 
   render() {
     const { userName, gameProgress } = this.props;
-    console.log(gameProgress);
+    const {
+      time,
+      selectedLamb,
+      isOpenHintWindow,
+      submittedByUser,
+      submittedByLamb,
+      rockPaperScissorsResult,
+      hintMessages,
+      isMusicOn,
+      isClearGame
+    } = this.state;
+
     if (gameProgress === CLEAR_GAME) {
-      return <Redirect to='/result' />
+      return <Redirect to='/result' />;
     }
 
     return (
       <>
+        {
+          isClearGame
+          ? <MissonCompleteModal
+              onModalClick={this.handleStopEvent}
+              onGoToResultClick={this.saveClearData}
+            />
+          : null
+        }
         <div>
+          <div
+            className='music-onoff-button'
+          >
+            {
+              isMusicOn
+              ? <FaVolumeUp onClick={this.musicOff}/>
+              : <FaVolumeMute onClick={this.musicOn}/>
+            }
+          </div>
           <Logo userName={userName} />
           <Clock
-            time={this.state.time}
+            time={time}
             onStartTimer={this.startTimer}
           />
-          <HintList />
-          {this.state.selectedLamb ? <SelectBox onKillButtonClick={this.killLamb}/> : null}
+          <HintList hintMessages={hintMessages} />
+          {
+            isOpenHintWindow
+            ? <RockPaperScissors
+                submittedByUser={submittedByUser}
+                submittedByLamb={submittedByLamb}
+                gameResult={rockPaperScissorsResult}
+                hintMessages={hintMessages}
+                onImageClick={this.playRockPaperScissorsGame}
+                onRestartButtonClick={this.restartHintWindow}
+                findHint={this.selectRandomOneLamb}
+              />
+            : null
+          }
+          {
+            selectedLamb
+            ? <SelectBox
+                onKillButtonClick={this.killLamb}
+                onHintOpenButtonClick={this.openHintWindow}
+              />
+            : null
+          }
         </div>
         <div id='game-field' ref={this.playScene} />
       </>

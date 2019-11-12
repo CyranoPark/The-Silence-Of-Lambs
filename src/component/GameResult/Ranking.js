@@ -4,7 +4,6 @@ import { FaRegArrowAltCircleLeft, FaRegArrowAltCircleRight } from "react-icons/f
 import { millisecondToDuration } from '../../utils';
 
 const Ranking = props => {
-
   const {
     topRankList,
     rankList,
@@ -46,10 +45,10 @@ const Ranking = props => {
         </div>
         <div className='top-rank-bottom'>
           <div className='rank-second'>
-            {topRankerView(topRankList[1], 2)}
+            {topRankList[1] ? topRankerView(topRankList[1], 2) : null}
           </div>
           <div className='rank-third'>
-            {topRankerView(topRankList[2], 3)}
+            {topRankList[2] ? topRankerView(topRankList[2], 3) : null}
           </div>
         </div>
       </div>

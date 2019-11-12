@@ -42,5 +42,30 @@ export const lambSize = [
     size: 1.5,
     name: '크다'
   }
-]
+];
 
+export const rockPaperScissorsItem = {
+  0: 'ROCK',
+  1: 'SCISSORS',
+  2: 'PAPER'
+};
+export const WIN = 'WIN';
+export const DRAW = 'DRAW';
+export const LOSE = 'LOSE';
+export const rockPaperScissorsPair = {
+  0: {
+    0: 'DRAW',
+    1: 'WIN',
+    2: 'LOSE'
+  },
+  1: {
+    0: 'LOSE',
+    1: 'DRAW',
+    2: 'WIN'
+  },
+  2: {
+    0: 'WIN',
+    1: 'LOSE',
+    2: 'DRAW'
+  },
+};

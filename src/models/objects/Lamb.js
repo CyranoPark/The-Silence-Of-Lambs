@@ -1,8 +1,7 @@
 import * as THREE from 'three';
-import optimerRegular from 'three/examples/fonts/droid/droid_sans_regular.typeface.json';
 
 export default class Lamb {
-  constructor(name, color, size, isLamb) {
+  constructor(color, size, isLamb) {
     this.group = new THREE.Group();
     this.group.scale.x = size;
     this.group.scale.y = size;
@@ -36,7 +35,6 @@ export default class Lamb {
       flatShading: true
     });
 
-    this.name = name;
     this.size = size;
     this.color = color;
     this.isLamb = isLamb;
@@ -48,7 +46,6 @@ export default class Lamb {
     this.drawBody();
     this.drawHead();
     this.drawLegs();
-    this.drawName(this.name);
   }
 
   rad(degrees) {
@@ -145,24 +142,6 @@ export default class Lamb {
     this.group.add(this.backLeftLeg);
   }
 
-  drawName(name) {
-    const loader = new THREE.FontLoader();
-    const font = loader.parse(optimerRegular);
-    const textGeometry = new THREE.TextGeometry(name, {
-      font,
-      size: 0.5,
-      height: 0.1,
-      bevelEnabled: true,
-      bevelThickness: 0.1,
-      bevelSize: 0.02,
-    });
-    const textMaterial = new THREE.MeshPhongMaterial({ color: 0xffffff });
-    this.nameTag = new THREE.Mesh(textGeometry, textMaterial);
-    this.nameTag.position.x = -1;
-    this.nameTag.position.y = 2;
-    this.group.add(this.nameTag);
-  }
-
   drawDeadEyes() {
     this.head.remove(this.rightEye);
     this.head.remove(this.leftEye);
@@ -191,7 +170,7 @@ export default class Lamb {
 
   jump(speed) {
     this.vAngle += speed;
-    this.group.position.y = Math.sin(this.vAngle) + 1.58 + this.size;
+    this.group.position.y = Math.sin(this.vAngle) + 1.9 + this.size;
 
     const legRotation = Math.sin(this.vAngle) * Math.PI / 6 + 0.4;
 
@@ -251,7 +230,6 @@ export default class Lamb {
     this.group.remove(this.head);
     this.group.remove(this.nameTag);
     this.group.add(this.wolfBody);
-    this.drawName('WOLF');
   }
 
   reset() {

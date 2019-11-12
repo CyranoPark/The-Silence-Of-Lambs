@@ -9,6 +9,7 @@ const App = props => {
   const {
     userName,
     gameProgress,
+    isLoadingGame,
     isSavingScore,
     clearTime,
     deathCount,
@@ -16,12 +17,16 @@ const App = props => {
     isLoadingResult,
     topRankList,
     rankList,
+    handleStartButtonClick,
     handleGameStart,
+    completeStartLoading,
+    handleGameRestart,
     changeUserNameInput,
     saveScore,
     fetchScores,
     fetchPrevScores,
-    fetchTopScores
+    fetchTopScores,
+    initRankingList
   } = props;
 
   return (
@@ -33,8 +38,18 @@ const App = props => {
             {...routeProps}
             userName={userName}
             gameProgress={gameProgress}
+            isLoadingGame={isLoadingGame}
+            isLoadingResult={isLoadingResult}
+            topRankList={topRankList}
+            rankList={rankList}
+            handleStartButtonClick={handleStartButtonClick}
             handleGameStart={handleGameStart}
+            completeStartLoading={completeStartLoading}
             changeUserNameInput={changeUserNameInput}
+            fetchScores={fetchScores}
+            fetchPrevScores={fetchPrevScores}
+            fetchTopScores={fetchTopScores}
+            initRankingList={initRankingList}
           />
         }
       />
@@ -67,19 +82,21 @@ const App = props => {
             clearTime={clearTime}
             deathCount={deathCount}
             score={score}
+            gameProgress={gameProgress}
             isLoadingResult={isLoadingResult}
             topRankList={topRankList}
             rankList={rankList}
+            onRestartButtonClick={handleGameRestart}
             fetchScores={fetchScores}
             fetchPrevScores={fetchPrevScores}
             fetchTopScores={fetchTopScores}
           />
         }
       />
-      {/* <Route
+      <Route
         path="/"
         render={() => <Redirect to="/start" />}
-      /> */}
+      />
     </div>
   );
 }

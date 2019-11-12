@@ -2,15 +2,12 @@ import React from 'react';
 import { FaWindowClose, FaRegArrowAltCircleLeft, FaRegArrowAltCircleRight } from "react-icons/fa";
 
 const Tutorial = props => {
-  const stopEvent = (event) => {
-    event.stopPropagation();
-  }
   return (
     <div
       className='tutorial-back'
       onClick={props.closeModal}
     >
-      <div className='tutorial-modal' onClick={(e) => stopEvent(e)} >
+      <div className='tutorial-modal' onClick={(e) => props.onModalBodyClick(e)} >
         <div className='tutorial-top'>
           <div className='tutorial-title'>
             <span>Tutorial</span>

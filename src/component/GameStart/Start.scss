@@ -30,7 +30,8 @@ $modal-background-color: rgba(0, 0, 0, 0.479);
   margin: 5px auto;
   text-align: right;
 
-  .tutorial-open-button {
+  .tutorial-open-button,
+  .ranking-open-button {
     background: transparent;
     border: 1px solid $border-color;
     border-radius: 5px;
@@ -38,6 +39,7 @@ $modal-background-color: rgba(0, 0, 0, 0.479);
     font-size: 12px;
     font-weight: bold;
     color: $form-text-color;
+    margin: 10px;
     cursor: pointer;
   }
 }
@@ -79,14 +81,15 @@ input[type=submit] {
   color: $error-text-color;
 }
 
-.tutorial-back {
+.tutorial-back, .ranking-back {
   position: absolute;
   width: 100%;
   height: 100%;
   background-color: $modal-background-color;
 }
 
-.tutorial-modal {
+.tutorial-modal,
+.ranking-modal {
   position: absolute;
   left: 50%;
   top: 50%;
@@ -99,11 +102,16 @@ input[type=submit] {
   border-radius: 20px;
   color: $form-text-color;
   text-align: left;
+
   .tutorial-video {
     width: 90%;
     margin: auto;
     height: 300px;
     border-bottom: 1px solid $border-color;
+  }
+
+  & svg {
+    cursor: pointer;
   }
 }
 

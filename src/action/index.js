@@ -1,13 +1,17 @@
 import {
   WRITE_USER_NAME,
+  START_LOADING_GAME,
+  COMPLETE_LOADING_GAME,
   START_GAME,
   COMPLETE_GAME,
+  RESTART_GAME,
   START_SAVE_SCORE,
   COMPLETE_SAVE_SCORE,
   START_FETCH_SCORES,
   FETCH_SCORES,
   COMPLETE_FETCH_TOP_SCORES,
-  COMPLETE_FETCH_SCORES
+  COMPLETE_FETCH_SCORES,
+  INIT_SCORES
 } from '../constants/actionType';
 
 export const changeUserNameInput= userName => ({
@@ -15,8 +19,20 @@ export const changeUserNameInput= userName => ({
   userName
 });
 
+export const startLoadingGame= () => ({
+  type: START_LOADING_GAME
+});
+
+export const completeLoadingGame= () => ({
+  type: COMPLETE_LOADING_GAME
+});
+
 export const startGame= () => ({
   type: START_GAME
+});
+
+export const restartGame= () => ({
+  type: RESTART_GAME
 });
 
 export const startSaveScore = () => ({
@@ -52,3 +68,7 @@ export const completeFetchTopScores = scores => ({
   scores
 });
 
+export const initializeScores = scores => ({
+  type: INIT_SCORES,
+  scores
+});
