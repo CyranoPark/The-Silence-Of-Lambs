@@ -344,10 +344,8 @@ export default class Play extends Component {
 
   playRockPaperScissorsGame = submittedByUser => {
     const submittedByLamb = new Date() % 3;
-    let result = checkResultRockPaperScissorsGame(submittedByUser, submittedByLamb);
-    //test
-    result = WIN;
-    //
+    const result = checkResultRockPaperScissorsGame(submittedByUser, submittedByLamb);
+
     this.setState({
       submittedByUser,
       submittedByLamb,
