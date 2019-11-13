@@ -17,7 +17,6 @@ import startGif from '../../asset/gif/start.gif';
 import hintGif from '../../asset/gif/hint.gif';
 import killGif from '../../asset/gif/kill.gif';
 import killWolfGif from '../../asset/gif/killwolf.gif';
-import imgLoading from '../../asset/gif/imgLoading.gif';
 
 import { checkValidUserName } from '../../api';
 import { PLAYING_GAME } from '../../constants/status';
@@ -164,7 +163,6 @@ export default class Start extends Component {
     return (
       <Tutorial
         gifImage={currentGif}
-        loadingGif={imgLoading}
         step={this.state.currentStep + 1}
         description={tutorialStep[this.state.currentStep]}
         onModalBodyClick={this.handleStopEvent}
@@ -236,7 +234,8 @@ export default class Start extends Component {
     this.props.fetchTopScores(this.fetchAdditionalScores);
     this.setState({
       isOpenRanking : true,
-      isOpenTutorial: false
+      isOpenTutorial: false,
+      rankingPage: 0
     });
   };
 

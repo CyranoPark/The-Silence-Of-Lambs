@@ -12,7 +12,7 @@ const Ranking = props => {
     onNextButtonClick,
     onPrevButtonClick
   } = props;
-
+  console.log(rankingPage)
   const topRankerRender = () => {
     if (!topRankList.length) {
       return;

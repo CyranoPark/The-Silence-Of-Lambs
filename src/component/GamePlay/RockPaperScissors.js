@@ -62,7 +62,6 @@ const rockPaperScissors = props => {
               src={process.env.PUBLIC_URL + `/images/${rockPaperScissorsItem[submittedByUser].toLowerCase()}.png`}
               alt='rockPaperScissors'
               className='rockPaperScissors-icon'
-              onClick={() => props.onImageClick(2)}
             />
           </div>
           <div className='game-result'>
@@ -73,7 +72,6 @@ const rockPaperScissors = props => {
               src={process.env.PUBLIC_URL + `/images/${rockPaperScissorsItem[submittedByLamb].toLowerCase()}.png`}
               alt='rockPaperScissors'
               className='rockPaperScissors-icon-reverse'
-              onClick={() => props.onImageClick(2)}
             />
           </div>
         </div>

@@ -28,7 +28,7 @@ class Result extends Component {
     if (gameProgress !== CLEAR_GAME) {
       return;
     }
-
+    this.setState({ rankingPage: 0 });
     this.props.fetchTopScores(this.fetchAdditionalScores);
     this.renderScore();
   }

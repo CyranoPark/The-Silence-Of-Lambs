@@ -66,7 +66,7 @@ const mapDispatchToProps = dispatch => {
     saveScore(name, clearTime, deathCount) {
       const totalTime = clearTime + deathCountToPenaltyTime(deathCount);
 
-      startSaveScore();
+      dispatch(startSaveScore());
 
       postScore(name, new Date().toISOString(), clearTime, deathCount, totalTime)
         .then(() => {
