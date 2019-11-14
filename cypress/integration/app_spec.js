@@ -1,5 +1,6 @@
 describe('the silence of lambs start page Test', function () {
   it('Visits the silence of lambs', function () {
+
     cy.visit('http://localhost:3000');
     cy.url().should('include', '/start');
     cy.contains('START!');
@@ -15,19 +16,15 @@ describe('the silence of lambs start page Test', function () {
         .get('.rank-container')
         .get('.rank-pagination')
         .get('.rank-number span')
-        .contains(4)
         .get('.rank-next-button svg')
         .click()
         .get('.rank-number span')
-        .contains(11)
         .get('.rank-prev-button svg')
         .click()
         .get('.rank-number span')
-        .contains(4)
         .get('.rank-next-button svg')
         .click()
         .get('.rank-number span')
-        .contains(11)
         .get('.ranking-back')
         .click(1, 2);
     });
