@@ -22,12 +22,12 @@ import {
 
 const userInitialState = {
   name: ''
-}
+};
 
 const user = (state = userInitialState, action) => {
   switch (action.type) {
     case WRITE_USER_NAME:
-      return Object.assign({...state}, {
+      return Object.assign({ ...state }, {
         name: action.userName,
       });
 
@@ -46,42 +46,42 @@ const gameInitialState = {
   score: 0,
   topRankList: [],
   rankList: []
-}
+};
 
 const game = (state = gameInitialState, action) => {
   switch (action.type) {
     case START_LOADING_GAME:
-      return Object.assign({...state}, {
+      return Object.assign({ ...state }, {
         isLoadingGame: true
       });
 
     case COMPLETE_LOADING_GAME:
-      return Object.assign({...state}, {
+      return Object.assign({ ...state }, {
         isLoadingGame: false
       });
 
     case START_GAME:
-      return Object.assign({...state}, {
+      return Object.assign({ ...state }, {
         gameProgress: PLAYING_GAME
       });
 
     case RESTART_GAME:
-      return Object.assign({...state}, {
-        gameProgress: BEFORE_START_GAME,
+      return Object.assign({ ...state }, {
+        gameProgress: BEFORE_START_GAME
       });
 
     case START_SAVE_SCORE:
-      return Object.assign({...state}, {
-        isSavingScore: true,
+      return Object.assign({ ...state }, {
+        isSavingScore: true
       });
 
     case COMPLETE_SAVE_SCORE:
-      return Object.assign({...state}, {
-        isSavingScore: false,
+      return Object.assign({ ...state }, {
+        isSavingScore: false
       });
 
     case COMPLETE_GAME:
-      return Object.assign({...state}, {
+      return Object.assign({ ...state }, {
         gameProgress: CLEAR_GAME,
         clearTime: action.clearTime,
         deathCount: action.deathCount,
@@ -89,28 +89,28 @@ const game = (state = gameInitialState, action) => {
       });
 
     case START_FETCH_SCORES:
-      return Object.assign({...state}, {
-        isLoadingResult: true,
+      return Object.assign({ ...state }, {
+        isLoadingResult: true
       });
 
     case COMPLETE_FETCH_TOP_SCORES:
-      return Object.assign({...state}, {
+      return Object.assign({ ...state }, {
         isLoadingResult: false,
         topRankList: action.scores
       });
 
     case FETCH_SCORES:
-      return Object.assign({...state}, {
+      return Object.assign({ ...state }, {
         rankList: action.scores
       });
 
     case COMPLETE_FETCH_SCORES:
-      return Object.assign({...state}, {
-        isLoadingResult: false,
+      return Object.assign({ ...state }, {
+        isLoadingResult: false
       });
 
     case INIT_SCORES:
-      return Object.assign({...state}, {
+      return Object.assign({ ...state }, {
         topRankList: [],
         rankList: []
       });

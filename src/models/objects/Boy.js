@@ -9,17 +9,17 @@ export default class Boy {
 
     this.hatMat = new THREE.MeshLambertMaterial({
       color: 0xBA833E,
-      flatShading: true,
+      flatShading: true
     });
 
     this.skinMat = new THREE.MeshLambertMaterial({
       color: 0xe0bea5,
-      flatShading: true,
+      flatShading: true
     });
 
     this.darkMat = new THREE.MeshLambertMaterial({
       color: 0x333333,
-      flatShading: true,
+      flatShading: true
     });
 
     this.eyeMat = new THREE.MeshLambertMaterial({
@@ -60,55 +60,55 @@ export default class Boy {
   }
 
   drawHead() {
-    //head
+    // head
     const head = new THREE.BoxGeometry(300, 350, 280);
     this.head = new THREE.Mesh(head, this.skinMat);
     this.head.position.x = 0;
     this.head.position.y = 1.7;
     this.head.position.z = 0;
 
-    //glasses
+    // glasses
     const glass = new THREE.CircleGeometry(60, 78, 10);
-    //Retinas Left
+    // Retinas Left
     this.glassLeft = new THREE.Mesh(glass, this.eyeMat);
     this.glassLeft.position.x = -80;
     this.glassLeft.position.y = 4;
     this.glassLeft.position.z = 160;
 
-    //Retinas Right
+    // Retinas Right
     this.glassRight = new THREE.Mesh(glass, this.eyeMat);
     this.glassRight.position.x = 80;
     this.glassRight.position.y = 4;
     this.glassRight.position.z = 160;
 
-    //glass middle
+    // glass middle
     const glassM = new THREE.BoxGeometry(40, 10, 10);
     this.glassM = new THREE.Mesh(glassM, this.darkMat);
     this.glassM.position.x = 0;
     this.glassM.position.y = 5;
     this.glassM.position.z = 155;
 
-    //Retinas
+    // Retinas
     const retina = new THREE.BoxGeometry(25, 25, 5);
-    //Retinas Left
+    // Retinas Left
     this.retinaLeft = new THREE.Mesh(retina, this.darkMat);
     this.retinaLeft.position.x = -80;
     this.retinaLeft.position.y = 5;
     this.retinaLeft.position.z = 168;
-    //Retinas Right
+    // Retinas Right
     this.retinaRight = new THREE.Mesh(retina, this.darkMat);
     this.retinaRight.position.x = 80;
     this.retinaRight.position.y = 5;
     this.retinaRight.position.z = 168;
 
-    //lip
+    // lip
     const lip = new THREE.BoxGeometry(40, 20, 10);
     this.lip = new THREE.Mesh(lip, this.darkMat);
     this.lip.position.x = 0;
     this.lip.position.z = 162;
     this.lip.position.y = -120;
 
-    //Hat
+    //  Hat
     const hatTop = new THREE.BoxGeometry(320, 120, 290);
     this.hatTop = new THREE.Mesh(hatTop, this.hatMat);
     this.hatTop.position.x = 0;
@@ -121,8 +121,7 @@ export default class Boy {
     this.hatBottom.position.z = 0;
     this.hatBottom.position.y = 120;
 
-    // group elements
-
+    //  group elements
     this.head.add(this.hatTop);
     this.head.add(this.hatBottom);
     this.head.add(this.glassM);
@@ -133,15 +132,15 @@ export default class Boy {
     this.head.add(this.lip);
 
 
-    this.head.scale.x = 0.005
-    this.head.scale.y = 0.005
-    this.head.scale.z = 0.005
+    this.head.scale.x = 0.005;
+    this.head.scale.y = 0.005;
+    this.head.scale.z = 0.005;
 
     this.group.add(this.head);
   }
 
   drawBody() {
-    //body
+    // body
     const body = new THREE.BoxGeometry(300, 250, 300);
     this.body = new THREE.Mesh(body, this.clothMat);
     this.body.position.x = 0;
@@ -154,8 +153,7 @@ export default class Boy {
     this.shoulder.position.y = 100;
     this.shoulder.position.z = 0;
 
-    //arms
-
+    // arms
     const arm = new THREE.BoxGeometry(50, 250, 100);
 
     this.armLeft = new THREE.Mesh(arm, this.clothMat);
@@ -169,8 +167,7 @@ export default class Boy {
     this.armRight.position.z = 0;
 
 
-    // hands
-
+    //  hands
     const hand = new THREE.BoxGeometry(50, 50, 50);
 
     this.handLeft = new THREE.Mesh(hand, this.skinMat);
@@ -187,11 +184,10 @@ export default class Boy {
 
     const stick = new THREE.BoxGeometry(20, 20, 1000);
     this.stick = new THREE.Mesh(stick, this.darkMat);
-    this.stick.position.z = 200
+    this.stick.position.z = 200;
     this.handRight.add(this.stick);
 
-    //legs
-
+    // legs
     const leftLeg = new THREE.BoxGeometry(100, 300, 150);
     this.leftLeg = new THREE.Mesh(leftLeg, this.legsMat);
     this.leftLeg.position.x = 80;
@@ -204,8 +200,7 @@ export default class Boy {
     this.rightLeg.position.y = -200;
     this.rightLeg.position.z = 0;
 
-    //shoes
-
+    // shoes
     const leftShoe = new THREE.BoxGeometry(100, 50, 200);
     this.leftShoe = new THREE.Mesh(leftShoe, this.shoesMat);
     this.leftShoe.position.x = 0;
@@ -227,9 +222,9 @@ export default class Boy {
     this.body.add(this.rightLeg);
     this.body.add(this.leftLeg);
 
-    this.body.scale.x = 0.005
-    this.body.scale.y = 0.005
-    this.body.scale.z = 0.005
+    this.body.scale.x = 0.005;
+    this.body.scale.y = 0.005;
+    this.body.scale.z = 0.005;
     this.group.add(this.body);
   }
 
@@ -254,13 +249,13 @@ export default class Boy {
   }
 
   hit() {
-    let timer = 10;
     let frameNum = 100;
+    const timer = 10;
     const hitAnimation = () => {
       frameNum++;
       const armRotation = Math.cos(frameNum) * Math.PI / 4;
       this.armRight.rotation.x = -armRotation;
-    }
+    };
     const hitAction = setInterval(hitAnimation, timer);
     setTimeout(() => {
       clearInterval(hitAction);

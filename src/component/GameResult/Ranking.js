@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { FaRegArrowAltCircleLeft, FaRegArrowAltCircleRight } from "react-icons/fa";
+import { FaRegArrowAltCircleLeft, FaRegArrowAltCircleRight } from 'react-icons/fa';
 import { millisecondToDuration } from '../../utils';
 
 const Ranking = props => {
@@ -12,21 +12,22 @@ const Ranking = props => {
     onNextButtonClick,
     onPrevButtonClick
   } = props;
-  console.log(rankingPage)
+
   const topRankerRender = () => {
     if (!topRankList.length) {
       return;
     }
+
     const topRankerView = (item, rank) => (
       <div className='top-rank-view'>
         {
           item.name === userName
-          ? <img
-              src={process.env.PUBLIC_URL + '/images/new_icon.png'}
+            ? <img
+              src={`${process.env.PUBLIC_URL}/images/new_icon.png`}
               alt='newIcon'
               className='new-icon'
             />
-          : null
+            : null
         }
         <div className='top-rank-number'>
           <span>{rank}</span>
@@ -55,8 +56,8 @@ const Ranking = props => {
     );
   };
 
-  const rankListRender = () => {
-    return rankList.map((rank, i) => {
+  const rankListRender = () => (
+    rankList.map((rank, i) => {
       const listItemClassName = rank.name === userName ? 'highlight' : '';
       return (
         <li key={i}>
@@ -64,12 +65,12 @@ const Ranking = props => {
             <div className='rank-number'>
               {
                 rank.name === userName
-                ? <img
-                    src={process.env.PUBLIC_URL + '/images/new_icon.png'}
+                  ? <img
+                    src={`${process.env.PUBLIC_URL}/images/new_icon.png`}
                     alt='newIcon'
                     className='new-icon'
                   />
-                : null
+                  : null
               }
               <span>{rankingPage * 7 - 3 + i}</span>
             </div>
@@ -82,17 +83,17 @@ const Ranking = props => {
         </li>
       );
     })
-  };
+  );
 
   const emptyListRender = () => {
     const emptyLine = [];
     for (let i = 0; i < 7 - rankList.length; i++) {
       emptyLine.push(
         <li key={i + rankList.length}>
-          <div className={'rank-list-item'} />
+          <div className='rank-list-item' />
           <hr className='div-line' />
         </li>
-      )
+      );
     }
     return emptyLine;
   };
@@ -104,8 +105,12 @@ const Ranking = props => {
       </div>
       <div className='rank-list'>
         <div className='rank-pagination'>
-          <div><FaRegArrowAltCircleLeft  onClick={onPrevButtonClick} /></div>
-          <div><FaRegArrowAltCircleRight onClick={onNextButtonClick} /></div>
+          <div className='rank-prev-button'>
+            <FaRegArrowAltCircleLeft onClick={onPrevButtonClick} />
+          </div>
+          <div className='rank-next-button'>
+            <FaRegArrowAltCircleRight onClick={onNextButtonClick} />
+          </div>
         </div>
         <ol>
           {rankListRender()}

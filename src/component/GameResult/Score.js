@@ -10,7 +10,6 @@ const Score = props => {
     score
   } = props;
 
-
   return (
     <div className='score-container'>
       <h2>TOTAL SCORE</h2>

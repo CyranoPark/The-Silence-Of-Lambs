@@ -1,7 +1,14 @@
 import React from 'react';
 
 const StartForm = props => {
-  const { userName, isValidName, onUserNameInputChange } = props;
+  const {
+    userName,
+    isValidName,
+    onUserNameInputChange,
+    onRankingButtonClick,
+    onTutorialButtonClick,
+    onUserNameSubmit
+  } = props;
 
   const renderValidateMessage = () => {
     if (!isValidName) {
@@ -18,21 +25,23 @@ const StartForm = props => {
     <>
       <div className='tutorial-button-wrap'>
         <button
+          type='button'
           className='ranking-open-button'
-          onClick={props.onRankingButtonClick}
+          onClick={onRankingButtonClick}
         >
           랭킹보기
         </button>
         <button
+          type='button'
           className='tutorial-open-button'
-          onClick={props.onTutorialButtonClick}
+          onClick={onTutorialButtonClick}
         >
           게임설명
         </button>
       </div>
       <form
         className='start-form'
-        onSubmit={(event) => props.onUserNameSubmit(event)}
+        onSubmit={event => onUserNameSubmit(event)}
       >
         <div>
           <h2>

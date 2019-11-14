@@ -13,53 +13,53 @@ class Result extends Component {
     super(props);
 
     this.state = {
-      counter: 0,
-      timer: 1000,
       timeScore: 0,
       deathScore: 0,
       deathPenaltyScore: 0,
       totalScore: 0,
       rankingPage: 0
-    }
+    };
   }
 
   componentDidMount() {
-    const { gameProgress } = this.props;
+    const { gameProgress, fetchTopScores } = this.props;
     if (gameProgress !== CLEAR_GAME) {
       return;
     }
     this.setState({ rankingPage: 0 });
-    this.props.fetchTopScores(this.fetchAdditionalScores);
+    fetchTopScores(this.fetchAdditionalScores);
     this.renderScore();
   }
 
   fetchAdditionalScores = () => {
     const { topRankList, rankList, fetchScores } = this.props;
+    const { rankingPage } = this.state;
     const nextStartScore = rankList.length
       ? rankList[rankList.length - 1].total_time + 1
       : topRankList[topRankList.length - 1].total_time + 1;
 
     fetchScores(7, nextStartScore, () => {
-      this.setState({ rankingPage: this.state.rankingPage + 1 });
+      this.setState({ rankingPage: rankingPage + 1 });
     });
   };
 
   fetchPreviousScores = () => {
+    const { rankingPage } = this.state;
     const { rankList, fetchPrevScores } = this.props;
-    if (!rankList.length || this.state.rankingPage === 1) {
+    if (!rankList.length || rankingPage === 1) {
       return;
     }
     const prevEndScore = rankList[0].total_time - 1;
     fetchPrevScores(7, prevEndScore, () => {
-      this.setState({ rankingPage: this.state.rankingPage - 1 });
+      this.setState({ rankingPage: rankingPage - 1 });
     });
   };
 
   renderScore = () => {
     const { clearTime } = this.props;
-
     const timeScoreInterval = setInterval(() => {
-      const nextTime = this.state.timeScore + 1000;
+      const { timeScore } = this.state;
+      const nextTime = timeScore + 1000;
       if (nextTime >= clearTime) {
         clearInterval(timeScoreInterval);
         this.setState({
@@ -80,16 +80,17 @@ class Result extends Component {
   renderDeathCount = () => {
     const { deathCount } = this.props;
     const deathCountInterval = setInterval(() => {
-      if (this.state.deathScore === deathCount) {
+      const { deathScore, totalScore } = this.state;
+      if (deathScore === deathCount) {
         clearInterval(deathCountInterval);
         return;
       }
 
-      const nextCount = this.state.deathScore + 1;
+      const nextCount = deathScore + 1;
       this.setState({
         deathScore: nextCount,
         deathPenaltyScore: deathCountToPenaltyTime(nextCount),
-        totalScore: this.state.totalScore + deathCountToPenaltyTime(1)
+        totalScore: totalScore + deathCountToPenaltyTime(1)
       });
     }, 500);
   };
@@ -100,7 +101,7 @@ class Result extends Component {
       topRankList,
       rankList,
       gameProgress,
-      onRestartButtonClick,
+      onRestartButtonClick
     } = this.props;
     const {
       timeScore,
@@ -111,7 +112,7 @@ class Result extends Component {
     } = this.state;
 
     if (gameProgress !== CLEAR_GAME) {
-      return <Redirect to='/start' />
+      return <Redirect to='/start' />;
     }
     return (
       <>
@@ -119,6 +120,7 @@ class Result extends Component {
         <div className='result-container'>
           <div>
             <button
+              type='button'
               className='restart-button'
               onClick={onRestartButtonClick}
             >
@@ -143,8 +145,8 @@ class Result extends Component {
           />
         </div>
       </>
-    )
-  };
-};
+    );
+  }
+}
 
 export default Result;

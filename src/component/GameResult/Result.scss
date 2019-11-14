@@ -101,6 +101,16 @@ h2 {
   }
 }
 
+.top-rank-view {
+  width: 80%;
+
+  & > div {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space:nowrap;
+  }
+}
+
 .top-rank-bottom {
   display: flex;
   justify-content: center;
@@ -153,10 +163,14 @@ h2 {
 
   div {
     width: 40%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space:nowrap;
     display: inline-block;
   }
   .rank-number {
     text-align: right;
+    margin-right: 5px;
     width: 50px;
   }
 

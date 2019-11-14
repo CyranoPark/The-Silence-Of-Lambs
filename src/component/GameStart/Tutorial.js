@@ -1,41 +1,64 @@
 import React from 'react';
-import { FaWindowClose, FaRegArrowAltCircleLeft, FaRegArrowAltCircleRight } from "react-icons/fa";
+import { FaWindowClose, FaRegArrowAltCircleLeft, FaRegArrowAltCircleRight } from 'react-icons/fa';
 
 const Tutorial = props => {
+  const {
+    closeModal,
+    onModalBodyClick,
+    step,
+    description,
+    gifImage,
+    prevTutorialButtonClick,
+    nextTutorialButtonClick
+  } = props;
+
   return (
     <div
       className='tutorial-back'
-      onClick={props.closeModal}
+      onClick={closeModal}
+      role='button'
+      tabIndex='0'
     >
-      <div className='tutorial-modal' onClick={(e) => props.onModalBodyClick(e)} >
+      <div
+        className='tutorial-modal'
+        onClick={event => onModalBodyClick(event)}
+        role='button'
+        tabIndex='0'
+      >
         <div className='tutorial-top'>
           <div className='tutorial-title'>
             <span>Tutorial</span>
           </div>
           <div className='tutorial-close'>
-            <FaWindowClose onClick={props.closeModal} />
+            <FaWindowClose onClick={closeModal} />
           </div>
         </div>
         <div className='tutorial-video'>
-          <img src={props.gifImage} alt={props.step} />
+          <img src={gifImage} alt={step} />
         </div>
         <div className='tutorial-bottom'>
           <div className='tutorial-comment'>
             <div className='tutorial-comment-step'>
-              STEP {props.step}.
+              {`STEP ${step}.`}
             </div>
             <div>
-              {props.description}
+              {description}
             </div>
           </div>
           <div className='tutorial-page'>
-            <FaRegArrowAltCircleLeft onClick={props.prevTutorialButtonClick}/>
-            <FaRegArrowAltCircleRight onClick={props.nextTutorialButtonClick} />
+            <FaRegArrowAltCircleLeft
+              className='prev-tutorial-button'
+              onClick={prevTutorialButtonClick}
+            />
+            <FaRegArrowAltCircleRight
+              className='next-tutorial-button'
+              onClick={nextTutorialButtonClick}
+            />
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 };
 
 export default Tutorial;

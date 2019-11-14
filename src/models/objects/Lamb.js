@@ -10,7 +10,7 @@ export default class Lamb {
     this.group.position.y = size * 1.7;
 
     this.woolMaterial = new THREE.MeshStandardMaterial({
-      color: color,
+      color,
       roughness: 1,
       flatShading: true
     });
@@ -206,8 +206,8 @@ export default class Lamb {
   }
 
   died(callback) {
-    let timer = 10;
-    let frameNum = 100;
+    const timer = 10;
+    const frameNum = 100;
     const initPosition = this.group.position.x;
     const dieAnimation = () => {
       this.group.position.x -= 1.6 / frameNum;
@@ -221,7 +221,7 @@ export default class Lamb {
         return;
       }
       setTimeout(dieAnimation, timer);
-    }
+    };
     setTimeout(dieAnimation, timer);
   }
 

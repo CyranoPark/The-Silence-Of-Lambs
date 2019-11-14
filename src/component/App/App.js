@@ -30,9 +30,10 @@ const App = props => {
   } = props;
 
   return (
-    <div className="App">
+    <div className='App'>
       <Route
-        exact path="/start"
+        exact
+        path='/start'
         render={routeProps =>
           <Start
             {...routeProps}
@@ -54,7 +55,8 @@ const App = props => {
         }
       />
       <Route
-        exact path="/play"
+        exact
+        path='/play'
         render={routeProps => {
           if (userName) {
             return (
@@ -70,11 +72,12 @@ const App = props => {
               />
             );
           }
-          return <Redirect to="/start" />;
+          return <Redirect to='/start' />;
         }}
       />
       <Route
-        exact path="/result"
+        exact
+        path='/result'
         render={routeProps =>
           <Result
             {...routeProps}
@@ -94,11 +97,11 @@ const App = props => {
         }
       />
       <Route
-        path="/"
-        render={() => <Redirect to="/start" />}
+        path='/'
+        render={() => <Redirect to='/start' />}
       />
     </div>
   );
-}
+};
 
 export default App;

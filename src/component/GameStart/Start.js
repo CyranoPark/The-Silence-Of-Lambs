@@ -39,7 +39,7 @@ export default class Start extends Component {
       isOpenRanking: false,
       rankingPage: 0,
       currentStep: 0
-    }
+    };
   }
 
   componentDidMount() {
@@ -67,13 +67,13 @@ export default class Start extends Component {
     startScene.scene.add(titleText.textMesh);
     startScene.scene.add(lamb.group);
 
-    const controls = new OrbitControls( startScene.camera, this.renderer.domElement );
+    const controls = new OrbitControls(startScene.camera, this.renderer.domElement);
     const animate = () => {
-      requestAnimationFrame( animate );
+      requestAnimationFrame(animate);
 
       lamb.jump(0.05);
       controls.update();
-      this.renderer.render( startScene.scene, startScene.camera );
+      this.renderer.render(startScene.scene, startScene.camera);
     };
 
     animate();
@@ -102,9 +102,11 @@ export default class Start extends Component {
     });
   };
 
-  handleUserNameInput = (userName) => {
+  handleUserNameInput = userName => {
     const { changeUserNameInput } = this.props;
-    if (!this.state.isValidName) {
+    const { isValidName } = this.state;
+
+    if (!isValidName) {
       this.setState({
         isValidName: true
       });
@@ -113,18 +115,23 @@ export default class Start extends Component {
   };
 
   renderStartForm = () => {
-    const { isOpenTutorial, isOpenRanking, userName } = this.state;
+    const {
+      isOpenTutorial,
+      isOpenRanking,
+      userName,
+      isValidName
+    } = this.state;
     const { isLoadingGame } = this.props;
 
     if (!isOpenRanking && !isOpenTutorial) {
       return (
-        <div className='start-form-modal' >
+        <div className='start-form-modal'>
           {
             isLoadingGame
-            ? <AppLoading />
-            :  <StartForm
+              ? <AppLoading />
+              : <StartForm
                 userName={userName}
-                isValidName={this.state.isValidName}
+                isValidName={isValidName}
                 onTutorialButtonClick={this.handleTutorialModalOpen}
                 onRankingButtonClick={this.handleRankingModalOpen}
                 onUserNameInputChange={this.handleUserNameInput}
@@ -137,8 +144,9 @@ export default class Start extends Component {
   }
 
   renderTutorial = () => {
+    const { currentStep } = this.state;
     let currentGif;
-    switch (this.state.currentStep) {
+    switch (currentStep) {
       case 0:
         currentGif = startGif;
         break;
@@ -163,8 +171,8 @@ export default class Start extends Component {
     return (
       <Tutorial
         gifImage={currentGif}
-        step={this.state.currentStep + 1}
-        description={tutorialStep[this.state.currentStep]}
+        step={currentStep + 1}
+        description={tutorialStep[currentStep]}
         onModalBodyClick={this.handleStopEvent}
         closeModal={this.handleModalClose}
         prevTutorialButtonClick={this.viewPrevTutorial}
@@ -174,7 +182,7 @@ export default class Start extends Component {
   }
 
   renderModal = () => {
-    const { isOpenTutorial, isOpenRanking } = this.state;
+    const { isOpenTutorial, isOpenRanking, rankingPage } = this.state;
     const {
       topRankList,
       rankList,
@@ -182,30 +190,40 @@ export default class Start extends Component {
       isLoadingResult
     } = this.props;
 
-    if(isOpenTutorial) {
+    if (isOpenTutorial) {
       return this.renderTutorial();
     }
 
-    if(isOpenRanking) {
+    if (isOpenRanking) {
       return (
-        <div className='ranking-back' onClick={this.handleModalClose}>
-          <div className='ranking-modal' onClick={this.handleStopEvent}>
+        <div
+          className='ranking-back'
+          role='button'
+          tabIndex={0}
+          onClick={this.handleModalClose}
+        >
+          <div
+            className='ranking-modal'
+            role='button'
+            tabIndex={0}
+            onClick={this.handleStopEvent}
+          >
             {
               isLoadingResult
-              ? <AppLoading />
-              : (
-                <>
-                  <h2>RANKING</h2>
-                  <Ranking
-                    topRankList={topRankList}
-                    rankList={rankList}
-                    rankingPage={this.state.rankingPage}
-                    userName={userName}
-                    onNextButtonClick={this.fetchAdditionalScores}
-                    onPrevButtonClick={this.fetchPreviousScores}
-                  />
-                </>
-              )
+                ? <AppLoading />
+                : (
+                  <>
+                    <h2>RANKING</h2>
+                    <Ranking
+                      topRankList={topRankList}
+                      rankList={rankList}
+                      rankingPage={rankingPage}
+                      userName={userName}
+                      onNextButtonClick={this.fetchAdditionalScores}
+                      onPrevButtonClick={this.fetchPreviousScores}
+                    />
+                  </>
+                )
             }
           </div>
         </div>
@@ -214,26 +232,28 @@ export default class Start extends Component {
   };
 
   handleModalClose = () => {
+    const { initRankingList } = this.props;
     this.setState({
-      isOpenTutorial : false,
+      isOpenTutorial: false,
       isOpenRanking: false,
       rankingPage: 0
     });
 
-    this.props.initRankingList();
+    initRankingList();
   };
 
   handleTutorialModalOpen = () => {
     this.setState({
-      isOpenTutorial : true,
+      isOpenTutorial: true,
       isOpenRanking: false
     });
   };
 
   handleRankingModalOpen = () => {
-    this.props.fetchTopScores(this.fetchAdditionalScores);
+    const { fetchTopScores } = this.props;
+    fetchTopScores(this.fetchAdditionalScores);
     this.setState({
-      isOpenRanking : true,
+      isOpenRanking: true,
       isOpenTutorial: false,
       rankingPage: 0
     });
@@ -241,23 +261,26 @@ export default class Start extends Component {
 
   fetchAdditionalScores = () => {
     const { topRankList, rankList, fetchScores } = this.props;
+    const { rankingPage } = this.state;
     const nextStartScore = rankList.length
       ? rankList[rankList.length - 1].total_time + 1
       : topRankList[topRankList.length - 1].total_time + 1;
 
     fetchScores(7, nextStartScore, () => {
-      this.setState({ rankingPage: this.state.rankingPage + 1 });
+      this.setState({ rankingPage: rankingPage + 1 });
     });
   };
 
   fetchPreviousScores = () => {
     const { rankList, fetchPrevScores } = this.props;
-    if (!rankList.length || this.state.rankingPage === 1) {
+    const { rankingPage } = this.state;
+
+    if (!rankList.length || rankingPage === 1) {
       return;
     }
     const prevEndScore = rankList[0].total_time - 1;
     fetchPrevScores(7, prevEndScore, () => {
-      this.setState({ rankingPage: this.state.rankingPage - 1 });
+      this.setState({ rankingPage: rankingPage - 1 });
     });
   };
 
@@ -266,26 +289,30 @@ export default class Start extends Component {
   }
 
   viewNextTutorial = () => {
-    if (this.state.currentStep < 3) {
-      this.setState({ currentStep: this.state.currentStep + 1 });
+    const { currentStep } = this.state;
+
+    if (currentStep < 3) {
+      this.setState({ currentStep: currentStep + 1 });
     }
   };
 
   viewPrevTutorial = () => {
-    if (this.state.currentStep > 0) {
-      this.setState({ currentStep: this.state.currentStep - 1 });
+    const { currentStep } = this.state;
+
+    if (currentStep > 0) {
+      this.setState({ currentStep: currentStep - 1 });
     }
   };
 
   render() {
     const { gameProgress } = this.props;
     if (gameProgress === PLAYING_GAME) {
-      return <Redirect to='/play' />
+      return <Redirect to='/play' />;
     }
 
     return (
       <>
-        <div id='start-title' ref={(startScene) => { this.startScene = startScene }} />
+        <div id='start-title' ref={startScene => { this.startScene = startScene; }} />
         <audio ref={this.audioRef} src={bgm} controls autoPlay />
         {this.renderModal()}
         {this.renderStartForm()}

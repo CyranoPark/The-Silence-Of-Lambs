@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import App from '../component/App/App';
-import { getScores, postScore, getPrevScores } from '../api'
+import { getScores, postScore, getPrevScores } from '../api';
 import { deathCountToPenaltyTime } from '../utils';
 import {
   changeUserNameInput,
@@ -44,82 +44,80 @@ const mapStateToProps = state => {
     topRankList,
     rankList
   };
-}
+};
 
-const mapDispatchToProps = dispatch => {
-  return {
-    changeUserNameInput(userName) {
-      dispatch(changeUserNameInput(userName));
-    },
-    handleStartButtonClick() {
-      dispatch(startLoadingGame());
-    },
-    completeStartLoading() {
-      dispatch(completeLoadingGame());
-    },
-    handleGameStart() {
-      dispatch(startGame());
-    },
-    handleGameRestart() {
-      dispatch(restartGame());
-    },
-    saveScore(name, clearTime, deathCount) {
-      const totalTime = clearTime + deathCountToPenaltyTime(deathCount);
+const mapDispatchToProps = dispatch => ({
+  changeUserNameInput(userName) {
+    dispatch(changeUserNameInput(userName));
+  },
+  handleStartButtonClick() {
+    dispatch(startLoadingGame());
+  },
+  completeStartLoading() {
+    dispatch(completeLoadingGame());
+  },
+  handleGameStart() {
+    dispatch(startGame());
+  },
+  handleGameRestart() {
+    dispatch(restartGame());
+  },
+  saveScore(name, clearTime, deathCount) {
+    const totalTime = clearTime + deathCountToPenaltyTime(deathCount);
 
-      dispatch(startSaveScore());
+    dispatch(startSaveScore());
 
-      postScore(name, new Date().toISOString(), clearTime, deathCount, totalTime)
-        .then(() => {
-          dispatch(completeSaveScore());
-          dispatch(completeGame(clearTime, deathCount, totalTime));
-        })
-        .catch(() => {
-          console.log('save failed');
-        })
-    },
-    fetchTopScores(callback) {
-      dispatch(startFetchScores());
-      getScores(3, 0)
-        .then(data => {
-          if (!data.length) {
-            dispatch(completeFetchScores());
-            callback();
-            return;
-          }
-          dispatch(completeFetchTopScores(data));
-          callback();
-        });
-    },
-    fetchScores(limit, start, callback) {
-      dispatch(startFetchScores());
-      getScores(limit, start)
-        .then(data => {
-          if (!data.length) {
-            dispatch(completeFetchScores());
-            return;
-          }
-          dispatch(fetchScores(data));
+    postScore(name, new Date().toISOString(), clearTime, deathCount, totalTime)
+      .then(() => {
+        dispatch(completeGame(clearTime, deathCount, totalTime));
+        dispatch(completeSaveScore());
+      })
+      .catch(() => {
+        console.error('save failed');
+      });
+  },
+  fetchTopScores(callback) {
+    dispatch(startFetchScores());
+    getScores(3, 0)
+      .then(data => {
+        if (!data.length) {
           dispatch(completeFetchScores());
           callback();
-        });
-    },
-    fetchPrevScores(limit, end, callback) {
-      dispatch(startFetchScores());
-      getPrevScores(limit, end)
-        .then(data => {
-          if (!data.length) {
-            dispatch(completeFetchScores());
-            return;
-          }
-          dispatch(fetchScores(data));
+          return;
+        }
+        dispatch(completeFetchTopScores(data));
+        callback();
+      });
+  },
+  fetchScores(limit, start, callback) {
+    dispatch(startFetchScores());
+    getScores(limit, start)
+      .then(data => {
+        if (!data.length) {
           dispatch(completeFetchScores());
-          callback();
-        });
-    },
-    initRankingList() {
-      dispatch(initializeScores());
-    }
-  };
-}
+          return;
+        }
+        dispatch(fetchScores(data));
+        dispatch(completeFetchScores());
+        callback();
+      });
+  },
+  fetchPrevScores(limit, end, callback) {
+    dispatch(startFetchScores());
+    getPrevScores(limit, end)
+      .then(data => {
+        if (!data.length) {
+          dispatch(completeFetchScores());
+          return;
+        }
+        dispatch(fetchScores(data));
+        dispatch(completeFetchScores());
+        callback();
+      });
+  },
+  initRankingList() {
+    dispatch(initializeScores());
+  }
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

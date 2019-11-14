@@ -6,7 +6,11 @@ export const durationToMillisecond = duration => (
 );
 
 export const millisecondToDuration = millisecond => (
-  moment().minute(0).second(0).millisecond(millisecond).format('mm:ss:SS')
+  moment()
+    .minute(0)
+    .second(0)
+    .millisecond(millisecond)
+    .format('mm:ss:SS')
 );
 
 export const deathCountToPenaltyTime = count => (
