@@ -30,7 +30,7 @@
 
 ```sh
 git clone https://github.com/CyranoPark/The-Silence-Of-Lambs.git
-cd wewalk-app
+cd The-Silence-Of-Lambs
 npm install
 npm start
 ```
