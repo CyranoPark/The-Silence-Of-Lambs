@@ -11,6 +11,7 @@ import {
   completeGame,
   startSaveScore,
   completeSaveScore,
+  failSaveScore,
   startFetchScores,
   fetchScores,
   completeFetchTopScores,
@@ -73,7 +74,7 @@ const mapDispatchToProps = dispatch => ({
         dispatch(completeSaveScore());
       })
       .catch(() => {
-        console.error('save failed');
+        dispatch(failSaveScore());
       });
   },
   fetchTopScores(callback) {

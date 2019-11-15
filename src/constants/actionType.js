@@ -5,7 +5,7 @@ export const START_GAME = 'START_GAME';
 
 export const START_SAVE_SCORE = 'START_SAVE_SCORE';
 export const COMPLETE_SAVE_SCORE = 'COMPLETE_SAVE_SCORE';
-
+export const FAIL_SAVE_SCORE = 'FAIL_SAVE_SCORE';
 export const COMPLETE_GAME = 'COMPLETE_GAME';
 export const RESTART_GAME = 'RESTART_GAME';
 

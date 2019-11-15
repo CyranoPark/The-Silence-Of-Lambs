@@ -89,7 +89,8 @@ const App = props => {
             isLoadingResult={isLoadingResult}
             topRankList={topRankList}
             rankList={rankList}
-            onRestartButtonClick={handleGameRestart}
+            initRankingList={initRankingList}
+            handleGameRestart={handleGameRestart}
             fetchScores={fetchScores}
             fetchPrevScores={fetchPrevScores}
             fetchTopScores={fetchTopScores}

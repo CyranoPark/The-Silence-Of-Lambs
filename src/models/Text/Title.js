@@ -16,4 +16,4 @@ export default class titleText {
     this.textMaterial = new THREE.MeshPhongMaterial({ color: 0xffffff });
     this.textMesh = new THREE.Mesh(this.textGeometry, this.textMaterial);
   }
-};
+}

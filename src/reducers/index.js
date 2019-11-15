@@ -7,6 +7,7 @@ import {
   RESTART_GAME,
   START_SAVE_SCORE,
   COMPLETE_SAVE_SCORE,
+  FAIL_SAVE_SCORE,
   COMPLETE_GAME,
   START_FETCH_SCORES,
   FETCH_SCORES,
@@ -28,7 +29,7 @@ const user = (state = userInitialState, action) => {
   switch (action.type) {
     case WRITE_USER_NAME:
       return Object.assign({ ...state }, {
-        name: action.userName,
+        name: action.userName
       });
 
     default:
@@ -78,6 +79,14 @@ const game = (state = gameInitialState, action) => {
     case COMPLETE_SAVE_SCORE:
       return Object.assign({ ...state }, {
         isSavingScore: false
+      });
+
+    case FAIL_SAVE_SCORE:
+      return Object.assign({ ...state }, {
+        gameProgress: CLEAR_GAME,
+        clearTime: 0,
+        deathCount: 0,
+        score: 0
       });
 
     case COMPLETE_GAME:

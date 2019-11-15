@@ -8,7 +8,7 @@ const HintList = ({ hintMessages }) => {
   return (
     <div className='hint'>
       Hint
-			<ul className='hint-list'>
+      <ul className='hint-list'>
         {hintListRender()}
       </ul>
     </div>

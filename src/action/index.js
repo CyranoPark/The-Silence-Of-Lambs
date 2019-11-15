@@ -7,6 +7,7 @@ import {
 	RESTART_GAME,
 	START_SAVE_SCORE,
 	COMPLETE_SAVE_SCORE,
+	FAIL_SAVE_SCORE,
 	START_FETCH_SCORES,
 	FETCH_SCORES,
 	COMPLETE_FETCH_TOP_SCORES,
@@ -41,6 +42,10 @@ export const startSaveScore = () => ({
 
 export const completeSaveScore = () => ({
 	type: COMPLETE_SAVE_SCORE
+});
+
+export const failSaveScore = () => ({
+	type: FAIL_SAVE_SCORE
 });
 
 export const completeGame = (clearTime, deathCount, score) => ({

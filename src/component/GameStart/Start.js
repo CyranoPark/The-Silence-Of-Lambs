@@ -251,12 +251,11 @@ export default class Start extends Component {
 
   handleRankingModalOpen = () => {
     const { fetchTopScores } = this.props;
-    fetchTopScores(this.fetchAdditionalScores);
     this.setState({
       isOpenRanking: true,
-      isOpenTutorial: false,
-      rankingPage: 0
+      isOpenTutorial: false
     });
+    fetchTopScores(this.fetchAdditionalScores);
   };
 
   fetchAdditionalScores = () => {

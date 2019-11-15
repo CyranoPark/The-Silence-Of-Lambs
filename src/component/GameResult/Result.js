@@ -26,7 +26,6 @@ class Result extends Component {
     if (gameProgress !== CLEAR_GAME) {
       return;
     }
-    this.setState({ rankingPage: 0 });
     fetchTopScores(this.fetchAdditionalScores);
     this.renderScore();
   }
@@ -37,7 +36,6 @@ class Result extends Component {
     const nextStartScore = rankList.length
       ? rankList[rankList.length - 1].total_time + 1
       : topRankList[topRankList.length - 1].total_time + 1;
-
     fetchScores(7, nextStartScore, () => {
       this.setState({ rankingPage: rankingPage + 1 });
     });
@@ -46,7 +44,7 @@ class Result extends Component {
   fetchPreviousScores = () => {
     const { rankingPage } = this.state;
     const { rankList, fetchPrevScores } = this.props;
-    if (!rankList.length || rankingPage === 1) {
+    if (!rankList.length || rankingPage <= 1) {
       return;
     }
     const prevEndScore = rankList[0].total_time - 1;
@@ -57,11 +55,11 @@ class Result extends Component {
 
   renderScore = () => {
     const { clearTime } = this.props;
-    const timeScoreInterval = setInterval(() => {
+    this.timeScoreInterval = setInterval(() => {
       const { timeScore } = this.state;
       const nextTime = timeScore + 1000;
       if (nextTime >= clearTime) {
-        clearInterval(timeScoreInterval);
+        clearInterval(this.timeScoreInterval);
         this.setState({
           timeScore: clearTime,
           totalScore: clearTime
@@ -79,10 +77,10 @@ class Result extends Component {
 
   renderDeathCount = () => {
     const { deathCount } = this.props;
-    const deathCountInterval = setInterval(() => {
+    this.deathCountInterval = setInterval(() => {
       const { deathScore, totalScore } = this.state;
       if (deathScore === deathCount) {
-        clearInterval(deathCountInterval);
+        clearInterval(this.deathCountInterval);
         return;
       }
 
@@ -95,13 +93,20 @@ class Result extends Component {
     }, 500);
   };
 
+  onRestartButtonClick = () => {
+    const { handleGameRestart, initRankingList } = this.props;
+    clearInterval(this.deathCountInterval);
+    clearInterval(this.timeScoreInterval);
+    initRankingList();
+    handleGameRestart();
+  }
+
   render() {
     const {
       userName,
       topRankList,
       rankList,
-      gameProgress,
-      onRestartButtonClick
+      gameProgress
     } = this.props;
     const {
       timeScore,
@@ -122,7 +127,7 @@ class Result extends Component {
             <button
               type='button'
               className='restart-button'
-              onClick={onRestartButtonClick}
+              onClick={this.onRestartButtonClick}
             >
               RESTART
             </button>
