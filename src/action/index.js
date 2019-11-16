@@ -1,5 +1,6 @@
 import {
 	WRITE_USER_NAME,
+	INIT_USER_NAME,
 	START_LOADING_GAME,
 	COMPLETE_LOADING_GAME,
 	START_GAME,
@@ -18,6 +19,10 @@ import {
 export const changeUserNameInput = userName => ({
 	type: WRITE_USER_NAME,
 	userName
+});
+
+export const initUserName = userName => ({
+	type: INIT_USER_NAME
 });
 
 export const startLoadingGame = () => ({

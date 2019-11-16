@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
 import {
   WRITE_USER_NAME,
+  INIT_USER_NAME,
   START_LOADING_GAME,
   COMPLETE_LOADING_GAME,
   START_GAME,
@@ -30,6 +31,11 @@ const user = (state = userInitialState, action) => {
     case WRITE_USER_NAME:
       return Object.assign({ ...state }, {
         name: action.userName
+      });
+
+    case INIT_USER_NAME:
+      return Object.assign({ ...state }, {
+        name: ''
       });
 
     default:

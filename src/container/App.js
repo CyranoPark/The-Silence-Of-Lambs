@@ -4,6 +4,7 @@ import { getScores, postScore, getPrevScores } from '../api';
 import { deathCountToPenaltyTime } from '../utils';
 import {
   changeUserNameInput,
+  initUserName,
   startLoadingGame,
   completeLoadingGame,
   startGame,
@@ -117,6 +118,7 @@ const mapDispatchToProps = dispatch => ({
       });
   },
   initRankingList() {
+    dispatch(initUserName());
     dispatch(initializeScores());
   }
 });
