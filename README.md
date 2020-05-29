@@ -63,8 +63,14 @@ npm test
 ### end-to-end test
 - cypress
 
+
 ```sh
-npm cypress
+npm start
+```
+서버가 실행되고 있는 상태에서
+
+```sh
+npm run cypress
 ```
 
 ## Deployment
